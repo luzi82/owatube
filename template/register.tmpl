@@ -1,4 +1,10 @@
+{% extends "base.tmpl" %}
+
+{% block title %}Member register{% endblock %}
+
+{% block body %}
 <form action="/member/register/" method="post">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>
+{% endblock %}
