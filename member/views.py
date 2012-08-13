@@ -2,11 +2,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django import forms
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
+            user = User.objects.create_user(username=form.cleaned_data["username"],password=form.cleaned_data["password0"])
             return HttpResponseRedirect(reverse("member.views.register_success"))
     else:
         form = RegisterForm()
