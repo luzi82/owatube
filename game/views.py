@@ -1,7 +1,8 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("Game index")
+    return render(request,"index.tmpl")
 
 def get_game_list(request):
     return HttpResponse("dummy")

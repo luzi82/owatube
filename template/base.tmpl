@@ -1,9 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{% block title %}TITLE{% endblock %}</title>
+<title>Owataikoto2 - {% block title %}{% endblock %}</title>
 </head>
 <body>
-{% block body %}{% endblock %}
+<ul>
+<li>Upload</li>
+<li>My owata</li>
+{% if user.is_authenticated %}
+<li>{{ user.username }}</li>
+<li>Logout</li>
+{% else %}
+<li>Login</li>
+{% endif %}
+</ul>
+<hr/>
+{% block main %}{% endblock %}
 </body>
 </html>
