@@ -7,6 +7,6 @@ urlpatterns = patterns("member.views",
 )
 
 urlpatterns += patterns("django.contrib.auth.views",
-    url(r'^login/$', 'login', {'template_name': 'login.tmpl'}),
-    url(r'^logout/$', 'logout', {'template_name': 'logout.tmpl'}),
+    url(r'^login/$', 'login', {'template_name': 'member/login.tmpl'}),
+    url(r'^logout/$', 'logout', {'template_name': 'member/logout.tmpl'}),
 )

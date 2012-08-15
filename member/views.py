@@ -12,10 +12,10 @@ def register(request):
             return HttpResponseRedirect(reverse("member.views.register_success"))
     else:
         form = RegisterForm()
-    return render(request,"register.tmpl",{"form":form})
+    return render(request,"member/register.tmpl",{"form":form})
 
 def register_success(request):
-    return render(request,"register_success.tmpl")
+    return render(request,"member/register_success.tmpl")
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=20,min_length=6)
