@@ -16,6 +16,9 @@ def add_game_comment(request):
 def add_game_score(request):
     return HttpResponse("dummy")
 
+def add_game_rank(request):
+    return HttpResponse("dummy")
+
 def add_game(request):
     return HttpResponse("dummy")
 
