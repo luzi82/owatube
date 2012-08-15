@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django import forms
 
 def index(request):
     return render(request,"index.tmpl")
@@ -24,6 +25,12 @@ def add_game_score(request):
 
 def add_game(request):
     return render(request,"dummy.tmpl")
+
+class AddGameForm (forms.Form):
+    data = forms.FileField()
+    bgm = forms.FileField()
+    # owata_ver
+    # pic
 
 def edit_game(request, game_entry):
     return render(request,"dummy.tmpl")
