@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'owatube.views.home', name='home'),
+    url(r'^$', 'game.views.index'),
     # url(r'^owatube/', include('owatube.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^game/', include("game.urls")),
     url(r'^member/', include("member.urls")),
+    url(r'^game/', include("game.urls") ),
+    url(r'^g/(?P<game_entry>[0-9A-Za-z]+)/$', 'game.views.get_game'),
 )

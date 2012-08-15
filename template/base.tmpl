@@ -1,3 +1,5 @@
+{% load url from future %}
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -5,13 +7,15 @@
 </head>
 <body>
 <ul>
+<li><a href="/">Index</a></li>
+{% if user.is_authenticated %}
 <li>Upload</li>
 <li>My owata</li>
-{% if user.is_authenticated %}
-<li>{{ user.username }}</li>
-<li>Logout</li>
+<li><a href="{% url 'member.views.profile' username=user.username %}">{{ user.username }}</a></li>
+<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
 {% else %}
-<li>Login</li>
+<li><a href="{% url 'django.contrib.auth.views.login' %}">Login</a></li>
+<li><a href="{% url 'member.views.register' %}">Register</a></li>
 {% endif %}
 </ul>
 <hr/>
