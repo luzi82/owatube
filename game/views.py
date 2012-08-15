@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django import forms
 
 def index(request):
-    return render(request,"index.tmpl")
+    return render(request,"game/index.tmpl")
 
 def get_game_list_fw(request):
     if not request.user.is_authenticated():
