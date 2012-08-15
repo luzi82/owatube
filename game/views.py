@@ -24,7 +24,7 @@ def add_game_score(request):
     return render(request,"dummy.tmpl")
 
 def add_game_rank(request):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def add_game(request):
     return render(request,"dummy.tmpl")
