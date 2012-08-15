@@ -39,3 +39,8 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError("ValidationError")
         
         return password0
+
+
+def profile(request, username):
+    return render(request,"dummy.tmpl")
+

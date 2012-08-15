@@ -3,6 +3,7 @@ from django.conf.urls import patterns, url
 urlpatterns = patterns("member.views",
     url(r'^register/$', 'register'),
     url(r'^register_success/$', 'register_success'),
+    url(r'^profile/(?P<username>[0-9A-Za-z]+)/$', 'profile'),
 )
 
 urlpatterns += patterns("django.contrib.auth.views",
