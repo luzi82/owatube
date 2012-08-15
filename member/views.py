@@ -9,8 +9,8 @@ def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            User.objects.create_user(username=form.cleaned_data["username"],password=form.cleaned_data["password0"])
-            user = auth.authenticate(username=form.cleaned_data["username"],password=form.cleaned_data["password0"])
+            user = User.objects.create_user(username=form.cleaned_data["username"],password=form.cleaned_data["password0"])
+            user.save()
             if user.is_active:
                 auth.login(request, user)
             return HttpResponseRedirect(reverse("member.views.register_success"))

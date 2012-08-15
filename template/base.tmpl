@@ -9,7 +9,7 @@
 <ul>
 <li><a href="/">Index</a></li>
 {% if user.is_authenticated %}
-<li>Upload</li>
+<li><a href="{% url 'game.views.add_game' %}">Upload</a></li>
 <li>My owata</li>
 <li><a href="{% url 'member.views.profile' username=user.username %}">{{ user.username }}</a></li>
 <li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
