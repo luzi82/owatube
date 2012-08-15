@@ -5,19 +5,19 @@ def index(request):
     return render(request,"index.tmpl")
 
 def get_game_list(request, username):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def get_game(request, game_id):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def add_game_comment(request):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def add_game_score(request):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def add_game(request):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
 
 def edit_game(request, game_id):
-    return HttpResponse("dummy")
+    return render(request,"dummy.tmpl")
