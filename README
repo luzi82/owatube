@@ -1,6 +1,7 @@
 Ubuntu Install
 ==============
 
-# aptitude install php5-cgi
+# aptitude install php5-cgi php5-mysql
 # pip install django
 # easy_install south
+# lighttpd-enable-mod fastcgi-php
