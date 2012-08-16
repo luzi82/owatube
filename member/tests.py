@@ -7,11 +7,15 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.test.client import Client
+import owtforum
 
 
 class SimpleTest(TestCase):
 
-    pass
+    def test_owtforum_login(self):
+        self.assertEqual(owtforum.check_password("owt000", "asdf"),2600)
+        self.assertEqual(owtforum.check_password("owt000", "bad_password"),-1)
+        self.assertEqual(owtforum.check_password("bad_id", "bad_password"),-1)
 
 #    def test_basic_reg(self):
 #        c = Client()
