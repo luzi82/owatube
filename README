@@ -1,0 +1,6 @@
+Ubuntu Install
+==============
+
+# aptitude install php5-cgi
+# pip install django
+# easy_install south
