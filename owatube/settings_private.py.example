@@ -15,3 +15,7 @@ DATABASES = {
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n5on)$j3oszd71=^t43lvl)$i8*wp75vkrd6^qaunr5523=+ea'
+
+FORUM_HOST = "localhost"
+FORUM_PATH = "/~luzi82/phpBB3"
+FORUM_KEY = "BFBC34C8579AEF4CC65CB5F27156A84A"

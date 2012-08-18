@@ -4,6 +4,10 @@ import settings_private
 
 OWATUBE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+sp_attr = dir(settings_private)
+for attr in sp_attr:
+    globals()[attr] = getattr(settings_private,attr)
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -13,7 +17,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = settings_private.DATABASES
+#DATABASES = settings_private.DATABASES
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -76,7 +80,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = settings_private.SECRET_KEY
+#SECRET_KEY = settings_private.SECRET_KEY
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

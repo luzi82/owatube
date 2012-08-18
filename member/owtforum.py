@@ -6,6 +6,7 @@ import hashlib
 import binascii
 import json
 from Crypto import Random
+from django.conf import settings
 
 def check_password(username,password):
     p = {
@@ -18,8 +19,8 @@ def check_password(username,password):
     headers = {
         "Content-type": "application/x-www-form-urlencoded",
     }
-    conn = httplib.HTTPConnection("localhost")
-    conn.request("POST", "/~luzi82/phpBB3/json/auth.php", params, headers)
+    conn = httplib.HTTPConnection(settings.FORUM_HOST)
+    conn.request("POST", settings.FORUM_PATH+"/json/auth.php", params, headers)
     response = conn.getresponse()
     if response.status != 200:
         return -1
@@ -34,7 +35,7 @@ def check_password(username,password):
     
     return int(data["user_id"])
 
-KEY = binascii.a2b_hex("BFBC34C8579AEF4CC65CB5F27156A84A")
+KEY = binascii.a2b_hex(settings.FORUM_KEY)
 IV_SIZE = AES.block_size
 BLOCK_SIZE = AES.block_size
 HASH_SIZE = 32
