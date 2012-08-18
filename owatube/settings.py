@@ -159,3 +159,8 @@ LOGGING = {
 LOGIN_REDIRECT_URL="/"
 
 LOGIN_URL="/member/login/"
+
+AUTHENTICATION_BACKENDS = (
+    'member.backends.OwtForumBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
