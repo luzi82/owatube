@@ -13,9 +13,24 @@ import owtforum
 class SimpleTest(TestCase):
 
     def test_owtforum_login(self):
-        self.assertEqual(owtforum.check_password("owt000", "asdf"),2600)
-        self.assertEqual(owtforum.check_password("owt000", "bad_password"),-1)
+        self.assertEqual(owtforum.check_password("user000", "user000p"),54)
+        self.assertEqual(owtforum.check_password("user000", "bad_password"),-1)
         self.assertEqual(owtforum.check_password("bad_id", "bad_password"),-1)
+
+    def test_dec64(self):
+        enc64="qf0GuHjVxLaXDL/R59/6I2xOOk/bZyzrWS4x7eR/6uRqPk8DzTXwGjPqOA36+0WOaimqf+XcTv2OL5IUimPyoA=="
+        self.assertEqual(owtforum.DEC64(enc64),"abcd")
+        
+    def test_enc64(self):
+        data = "abcd"
+        enc64=owtforum.ENC64(data)
+        self.assertEqual(owtforum.DEC64(enc64),data)
+
+        data = ""
+        while len(data)<100:
+            enc64=owtforum.ENC64(data)
+            self.assertEqual(owtforum.DEC64(enc64),data)
+            data += "x"
 
 #    def test_basic_reg(self):
 #        c = Client()
