@@ -8,6 +8,22 @@ from game.models import Game
 def index(request):
     return render(request,"game/index.tmpl")
 
+def get_user_profile_fw(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(reverse("game.views.index"))
+    return HttpResponseRedirect(reverse("game.views.get_user_profile",kwargs={"username":request.user.username}))
+
+def get_user_profile(request, username):
+    return render(request,"dummy.tmpl")
+
+def get_game_score_list_fw(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect(reverse("game.views.index"))
+    return HttpResponseRedirect(reverse("game.views.get_game_score_list",kwargs={"username":request.user.username}))
+
+def get_game_score_list(request, username):
+    return render(request,"dummy.tmpl")
+
 def get_game_list_fw(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect(reverse("game.views.index"))
