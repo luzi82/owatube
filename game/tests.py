@@ -9,8 +9,15 @@ from django.test import TestCase
 
 
 class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+    
+    def test_param_pass(self):
+        def A(a,b,c):
+            return a+b+c
+        def B(a,*args,**kwargs):
+            return A(a,2,*args,**kwargs)
+        def C(a,*args,**kwargs):
+            return A(a,*args,c=4,**kwargs)
+        self.assertEqual(B(1,c=4),7)
+        self.assertEqual(B(1,4),7)
+        self.assertEqual(C(1,b=2),7)
+        self.assertEqual(C(1,2),7)

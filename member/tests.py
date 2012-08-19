@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".
@@ -16,6 +17,7 @@ class SimpleTest(TestCase):
         self.assertEqual(owtforum.check_password("user000", "user000p"),54)
         self.assertEqual(owtforum.check_password("user000", "bad_password"),-1)
         self.assertEqual(owtforum.check_password("bad_id", "bad_password"),-1)
+        self.assertEqual(owtforum.check_password("一二三", "123123"),55)
 
     def test_dec64(self):
         enc64="qf0GuHjVxLaXDL/R59/6I2xOOk/bZyzrWS4x7eR/6uRqPk8DzTXwGjPqOA36+0WOaimqf+XcTv2OL5IUimPyoA=="

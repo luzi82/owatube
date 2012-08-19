@@ -1,34 +1,37 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.core.urlresolvers import reverse
 from django import forms
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from game.models import Game
+import urllib
+
+## helper function
+
+def _check_u(f):
+    def ff(request,*args,**kwargs):
+        username=_get_user(request)
+        if username!=None:return f(request,*args,username=username,**kwargs)
+        if not request.user.is_authenticated():
+            HttpResponseRedirect(reverse("game.views.index"))
+        p = {"u":request.user.username}
+        return HttpResponseRedirect(request.path+"?"+urllib.urlencode(p))
+    return ff
+
+# view func
 
 def index(request):
     return render(request,"game/index.tmpl")
 
-def get_user_profile_fw(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse("game.views.index"))
-    return HttpResponseRedirect(reverse("game.views.get_user_profile",kwargs={"username":request.user.username}))
+@_check_u
+def get_user_profile(request,username):
+    return render(request,"dummy.tmpl",{"msg":username})
 
-def get_user_profile(request, username):
-    return render(request,"dummy.tmpl")
-
-def get_game_score_list_fw(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse("game.views.index"))
-    return HttpResponseRedirect(reverse("game.views.get_game_score_list",kwargs={"username":request.user.username}))
-
+@_check_u
 def get_game_score_list(request, username):
     return render(request,"dummy.tmpl")
 
-def get_game_list_fw(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect(reverse("game.views.index"))
-    return HttpResponseRedirect(reverse("game.views.get_game_list",kwargs={"username":request.user.username}))
-
+@_check_u
 def get_game_list(request, username):
     return render(request,"dummy.tmpl")
 
@@ -68,3 +71,9 @@ class AddGameForm (forms.Form):
 @login_required
 def edit_game(request, game_entry):
     return render(request,"dummy.tmpl")
+
+
+######
+
+def _get_user(request):
+    return request.GET.get("u",None)
