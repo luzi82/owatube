@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -rf media 
+rm -rf data 
 rm sqlite.db
 
 python manage.py syncdb --migrate --noinput
