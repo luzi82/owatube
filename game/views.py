@@ -28,17 +28,6 @@ def _check_game_entry(f):
     def ff(request,game_entry,*args,**kwargs):
         game = Game.objects.get(pk = game_entry)
         return f(request,game)
-#        username=request.GET.get("u",None)
-#        if username!=None:
-#            try:
-#                user = User.objects.get(username__exact = username)
-#                return f(request,*args,user=user,**kwargs)
-#            except User.DoesNotExist:
-#                return HttpResponseRedirect(reverse("game.views.index"))
-#        if not request.user.is_authenticated():
-#            return HttpResponseRedirect(reverse("game.views.index"))
-#        p = {"u":request.user.username}
-#        return HttpResponseRedirect(request.path+"?"+urllib.urlencode(p))
     return ff
 
 # view func
