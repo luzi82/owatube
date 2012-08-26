@@ -24,6 +24,23 @@ def _check_u(f):
         return HttpResponseRedirect(request.path+"?"+urllib.urlencode(p))
     return ff
 
+def _check_game_entry(f):
+    def ff(request,game_entry,*args,**kwargs):
+        game = Game.objects.get(pk = game_entry)
+        return f(request,game)
+#        username=request.GET.get("u",None)
+#        if username!=None:
+#            try:
+#                user = User.objects.get(username__exact = username)
+#                return f(request,*args,user=user,**kwargs)
+#            except User.DoesNotExist:
+#                return HttpResponseRedirect(reverse("game.views.index"))
+#        if not request.user.is_authenticated():
+#            return HttpResponseRedirect(reverse("game.views.index"))
+#        p = {"u":request.user.username}
+#        return HttpResponseRedirect(request.path+"?"+urllib.urlencode(p))
+    return ff
+
 # view func
 
 def index(request):
@@ -42,7 +59,20 @@ def get_game_list(request, user):
     game_list = Game.objects.filter(author__exact=user)
     return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
 
-def get_game(request, game_entry):
+@_check_game_entry
+def get_game(request, game):
+    return render(request,"dummy.tmpl",{"msg":game.id})
+
+@_check_game_entry
+def get_game_data(request, game):
+    return render(request,"dummy.tmpl")
+
+@_check_game_entry
+def get_game_bgm(request, game):
+    return render(request,"dummy.tmpl")
+
+@_check_game_entry
+def get_game_owata(request, game):
     return render(request,"dummy.tmpl")
 
 @login_required
