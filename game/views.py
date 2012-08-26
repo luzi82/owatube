@@ -27,8 +27,11 @@ def _check_u(f):
 
 def _check_game_entry(f):
     def ff(request,game_entry,*args,**kwargs):
-        game = Game.objects.get(pk = game_entry)
-        return f(request,*args,game=game,**kwargs)
+        try:
+            game = Game.objects.get(pk = game_entry)
+            return f(request,*args,game=game,**kwargs)
+        except Game.DoesNotExist:
+            return HttpResponseRedirect(reverse("game.views.index"))
     return ff
 
 # view func
