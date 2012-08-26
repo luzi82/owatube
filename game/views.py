@@ -31,8 +31,6 @@ def index(request):
 
 @_check_u
 def get_user_profile(request,user):
-#    game_list = Game.objects.filter()
-#    return render(request,"dummy.tmpl",{"game_list":game_list})
     return render(request,"dummy.tmpl")
 
 @_check_u
@@ -41,7 +39,8 @@ def get_game_score_list(request, user):
 
 @_check_u
 def get_game_list(request, user):
-    return render(request,"dummy.tmpl")
+    game_list = Game.objects.filter(author__exact=user)
+    return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
 
 def get_game(request, game_entry):
     return render(request,"dummy.tmpl")
