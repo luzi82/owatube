@@ -6,6 +6,7 @@ from django.shortcuts import render
 from game.models import Game
 import urllib
 from django.contrib.auth.models import User
+from django.core.servers.basehttp import FileWrapper
 
 ## helper function
 
@@ -54,11 +55,11 @@ def get_game(request, game):
 
 @_check_game_entry
 def get_game_data(request, game):
-    return render(request,"dummy.tmpl")
+    return HttpResponse(FileWrapper(game.data),content_type="text/plain")
 
 @_check_game_entry
 def get_game_bgm(request, game):
-    return render(request,"dummy.tmpl")
+    return HttpResponse(FileWrapper(game.bgm),content_type="audio/mpeg")
 
 @_check_game_entry
 def get_game_swf(request, game):
