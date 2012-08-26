@@ -5,3 +5,9 @@ Ubuntu Install
 # pip install django
 # easy_install south
 # lighttpd-enable-mod fastcgi-php
+
+
+Project prepare
+===============
+
+copy PROJECT/_reset.input.example to PROJECT/_reset.input, and modify
