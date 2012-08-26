@@ -7,6 +7,7 @@ from game.models import Game
 import urllib
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
+from django.conf import settings
 
 ## helper function
 
@@ -54,7 +55,7 @@ def get_game_list(request, user):
 
 @_check_game_entry
 def get_game(request, game):
-    return render(request,"dummy.tmpl",{"msg":game.id})
+    return render(request,"game/get_game.tmpl",{"game":game})
 
 @_check_game_entry
 def get_game_data(request, game):
@@ -66,7 +67,7 @@ def get_game_bgm(request, game):
 
 @_check_game_entry
 def get_game_swf(request, game):
-    return render(request,"dummy.tmpl")
+    return HttpResponse(FileWrapper(open(settings.OWATUBE_PATH+"/res/f90626fa.swf","r")),content_type="application/x-shockwave-flash")
 
 @login_required
 def add_game_comment(request):

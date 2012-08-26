@@ -1,0 +1,11 @@
+{% extends "base.tmpl" %}
+
+{% load url from future %}
+
+{% block title %}{{ user.username }} - Game list{% endblock %}
+
+{% block main %}
+<div align="center">
+<iframe width="576px" height="432px" src="{% url 'game.views.get_game_swf' game_entry=game.id %}"></iframe>
+</div>
+{% endblock %}
