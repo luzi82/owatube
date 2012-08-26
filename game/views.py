@@ -27,7 +27,7 @@ def _check_u(f):
 def _check_game_entry(f):
     def ff(request,game_entry,*args,**kwargs):
         game = Game.objects.get(pk = game_entry)
-        return f(request,game)
+        return f(request,*args,game=game,**kwargs)
     return ff
 
 # view func
