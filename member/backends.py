@@ -8,7 +8,7 @@ class OwtForumBackend:
             return None
         
         try:
-            user = User.objects.get(username = username)
+            user = User.objects.get(username__exact = username)
         except User.DoesNotExist:
             user = User(username = username)
             user.is_staff = False
