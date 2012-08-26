@@ -10,9 +10,10 @@ class OwtForumBackend:
         try:
             user = User.objects.get(username = username)
         except User.DoesNotExist:
-            user = User(username = username, password = "")
+            user = User(username = username)
             user.is_staff = False
             user.is_superuser = False
+            user.set_unusable_password()
             user.save()
 
         return user
