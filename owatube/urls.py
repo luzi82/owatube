@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^member/', include("member.urls")),
     url(r'^game/', include("game.urls") ),
-    url(r'^g/(?P<game_entry>[0-9A-Za-z]+)/$', 'game.views.get_game'),
+    url(r'^g/', include("game.urls_g") ),
 )
