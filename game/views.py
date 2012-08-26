@@ -61,7 +61,7 @@ def get_game_bgm(request, game):
     return render(request,"dummy.tmpl")
 
 @_check_game_entry
-def get_game_owata(request, game):
+def get_game_swf(request, game):
     return render(request,"dummy.tmpl")
 
 @login_required
