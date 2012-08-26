@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 class OwtForumBackend:
     
     def authenticate(self, username=None, password=None):
-        if not owtforum.check_password(username, password):
+        if owtforum.check_password(username, password) == -1:
             return None
         
         try:
