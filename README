@@ -5,9 +5,3 @@ Ubuntu Install
 # pip install django
 # easy_install south
 # lighttpd-enable-mod fastcgi-php
-
-
-License
-=======
-
-- django-phpbb, from http://code.google.com/p/django-phpbb/
