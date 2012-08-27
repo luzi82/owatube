@@ -74,10 +74,6 @@ def add_game_comment(request):
     return render(request,"dummy.tmpl")
 
 @login_required
-def add_game_score(request):
-    return render(request,"dummy.tmpl")
-
-@login_required
 def add_game_rank(request):
     return render(request,"dummy.tmpl")
 
