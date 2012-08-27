@@ -8,4 +8,8 @@
 <div align="center">
 <iframe width="576px" height="432px" src="{% url 'game.views.get_game_swf' game_entry=game.id %}"></iframe>
 </div>
+<form action="{% url 'game.views.add_game_comment' %}" method="post">{% csrf_token %}
+{{ comment_form.as_p }}
+<input type="submit" value="Submit" />
+</form>
 {% endblock %}

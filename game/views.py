@@ -55,7 +55,8 @@ def get_game_list(request, user):
 
 @_check_game_entry
 def get_game(request, game):
-    return render(request,"game/get_game.tmpl",{"game":game})
+    comment_form = AddGameCommentForm(initial={"game_entry":game.id})
+    return render(request,"game/get_game.tmpl",{"game":game,"comment_form":comment_form})
 
 @_check_game_entry
 def get_game_data(request, game):
@@ -71,7 +72,17 @@ def get_game_swf(request, game):
 
 @login_required
 def add_game_comment(request):
-    return render(request,"dummy.tmpl")
+    if request.method == "POST":
+        comment_form = AddGameCommentForm(request.POST)
+        if comment_form.is_valid():
+            game_entry = comment_form.cleaned_data["game_entry"]
+            comment = comment_form.cleaned_data["comment"]
+            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))
+    return HttpResponseRedirect(reverse("game.views.index"))
+
+class AddGameCommentForm (forms.Form):
+    game_entry = forms.CharField(widget=forms.widgets.HiddenInput())
+    comment = forms.CharField(widget=forms.widgets.Textarea())
 
 @login_required
 def add_game_rank(request):
