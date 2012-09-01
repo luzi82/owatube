@@ -4,4 +4,4 @@ rm -rf data
 rm sqlite.db
 
 python manage.py syncdb --migrate --noinput
-python manage.py shell < _reset.input.py >> /dev/null
+python manage.py shell < reset.py >> /dev/null
