@@ -12,6 +12,7 @@ class Migration(SchemaMigration):
         db.create_table('game_swf', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=32)),
         ))
         db.send_create_signal('game', ['Swf'])
 
@@ -84,7 +85,8 @@ class Migration(SchemaMigration):
         'game.swf': {
             'Meta': {'object_name': 'Swf'},
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         }
     }
 
