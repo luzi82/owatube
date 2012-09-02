@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from game.models import Game
+from game.models import Game, Swf
 import urllib
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
@@ -68,7 +68,7 @@ def get_game_bgm(request, game):
 
 @_check_game_entry
 def get_game_swf(request, game):
-    return HttpResponse(FileWrapper(open(settings.OWATUBE_PATH+"/res/f90626fa.swf","r")),content_type="application/x-shockwave-flash")
+    return HttpResponse(FileWrapper(game.swf.file),content_type="application/x-shockwave-flash")
 
 @login_required
 def add_game_comment(request):
@@ -93,7 +93,8 @@ def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
-            game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'])
+            swf = Swf.objects.get(pk=request.POST['swf'])
+            game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'],swf=swf)
             game.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game.pk}))
     else:
@@ -103,7 +104,7 @@ def add_game(request):
 class AddGameForm (forms.Form):
     data = forms.FileField()
     bgm = forms.FileField()
-    # owata_ver
+    swf = forms.ModelChoiceField(queryset=Swf.objects.all(),empty_label=None)
     # pic
 
 @login_required
