@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".
@@ -6,7 +7,7 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-
+import re
 
 class SimpleTest(TestCase):
     
@@ -21,3 +22,63 @@ class SimpleTest(TestCase):
         self.assertEqual(B(1,4),7)
         self.assertEqual(C(1,b=2),7)
         self.assertEqual(C(1,2),7)
+
+    def test_reg(self):
+        text="*太鼓のオワタツジン結果*Ver3.03"
+        reg="\*太鼓のオワタツジン結果\*Ver3\.03"
+        self.assertTrue(re.match(reg,text))
+
+        text="""*太鼓のオワタツジン結果*Ver3.03
+曲名:凛として咲く花の如く"""
+        reg="""\*太鼓のオワタツジン結果\*Ver3\.03
+曲名:([^\\n]*)"""
+        m=re.search(reg,text)
+        self.assertEqual(m.group(1),"凛として咲く花の如く")
+        
+        text="""*太鼓のオワタツジン結果*Ver3.03
+曲名:凛として咲く花の如く
+曲:
+譜面:No.31
+コース:おわたコース(★7)
+ノルマクリア成功
+得点:1026720点
+判定:良 573/可 0/不可 0
+最大コンボ数:573回
+叩けた率:100%
+連打:118回
+オプション:なし
+譜面コード:16906247
+証明コード:
+#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
+        reg="""\*太鼓のオワタツジン結果\*Ver3\.03
+曲名:[^\\n]*
+曲:[^\\n]*
+譜面:[^\\n]*
+コース:[^\\n]*
+ノルマクリア(?P<result>成功|失敗)
+得点:(?P<score>[0-9]+)点
+判定:良 (?P<r0>[0-9]+)/可 (?P<r1>[0-9]+)/不可 (?P<r2>[0-9]+)
+最大コンボ数:(?P<combo>[0-9]+)回
+叩けた率:([0-9]+)%
+連打:(?P<lenda>[0-9]+)回
+オプション:(?P<option>[^\\n]+)
+譜面コード:(?P<code>[0-9]+)
+証明コード:
+(?P<prove>#!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#)"""
+        m=re.search(reg,text)
+        self.assertIsNotNone(m)
+        self.assertEqual(m.group("result"),"成功")
+        self.assertEqual(m.group("score"),"1026720")
+        self.assertEqual(m.group("r0"),"573")
+        self.assertEqual(m.group("r1"),"0")
+        self.assertEqual(m.group("r2"),"0")
+        self.assertEqual(m.group("combo"),"573")
+        self.assertEqual(m.group("lenda"),"118")
+        self.assertEqual(m.group("option"),"なし")
+        self.assertEqual(m.group("code"),"16906247")
+        self.assertEqual(m.group("prove"),"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
+        
+        reg2="#!#(?P<code>[0-9]+)!#(?P<score>[0-9]+)!#31345!#15589489!#23726650!#"
+        m2=re.search(reg2,m.group("prove"))
+        self.assertEqual(m2.group("code"),"16906247")
+        self.assertEqual(m2.group("score"),"1026720")
