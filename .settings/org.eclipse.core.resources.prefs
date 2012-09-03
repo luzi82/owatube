@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//game/check_score.py=utf-8
 encoding//game/tests.py=utf-8
 encoding//member/migrations/0001_initial.py=utf-8
 encoding//member/owtforum.py=utf-8

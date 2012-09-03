@@ -4,6 +4,7 @@ from django.contrib.auth import models as auth_models
 class Swf(models.Model):
     file = models.FileField(upload_to="game/swf/%Y/%m/%d")
     name = models.CharField(max_length=32)
+    pars = models.IntegerField(max_length=4)
 
 class Game(models.Model):
     author = models.ForeignKey(auth_models.User)

@@ -8,6 +8,7 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 import re
+import game.check_score
 
 class SimpleTest(TestCase):
     
@@ -50,35 +51,19 @@ class SimpleTest(TestCase):
 譜面コード:16906247
 証明コード:
 #!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-        reg="""\*太鼓のオワタツジン結果\*Ver3\.03
-曲名:[^\\n]*
-曲:[^\\n]*
-譜面:[^\\n]*
-コース:[^\\n]*
-ノルマクリア(?P<result>成功|失敗)
-得点:(?P<score>[0-9]+)点
-判定:良 (?P<r0>[0-9]+)/可 (?P<r1>[0-9]+)/不可 (?P<r2>[0-9]+)
-最大コンボ数:(?P<combo>[0-9]+)回
-叩けた率:([0-9]+)%
-連打:(?P<lenda>[0-9]+)回
-オプション:(?P<option>[^\\n]+)
-譜面コード:(?P<code>[0-9]+)
-証明コード:
-(?P<prove>#!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#)"""
-        m=re.search(reg,text)
+        m=game.check_score.parse0_re0.search(text)
         self.assertIsNotNone(m)
         self.assertEqual(m.group("result"),"成功")
         self.assertEqual(m.group("score"),"1026720")
         self.assertEqual(m.group("r0"),"573")
         self.assertEqual(m.group("r1"),"0")
         self.assertEqual(m.group("r2"),"0")
-        self.assertEqual(m.group("combo"),"573")
+        self.assertEqual(m.group("maxcombo"),"573")
         self.assertEqual(m.group("lenda"),"118")
         self.assertEqual(m.group("option"),"なし")
         self.assertEqual(m.group("code"),"16906247")
         self.assertEqual(m.group("prove"),"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
         
-        reg2="#!#(?P<code>[0-9]+)!#(?P<score>[0-9]+)!#31345!#15589489!#23726650!#"
-        m2=re.search(reg2,m.group("prove"))
+        m2=game.check_score.parse0_re1.search(m.group("prove"))
         self.assertEqual(m2.group("code"),"16906247")
         self.assertEqual(m2.group("score"),"1026720")
