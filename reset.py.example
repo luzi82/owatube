@@ -1,10 +1,27 @@
 from django.contrib.auth.models import User
+import game.models
+import django.core.files
+
+# conf part
 
 username = "admin"
 password = "password"
+
+# init admin account
 
 user = User(username=username)
 user.is_staff = True
 user.is_superuser = True
 user.set_password(password)
 user.save()
+
+# import swf files
+
+swf = game.models.Swf(pars=0,name="3.03. A")
+f = open("res/f90626fa.swf")
+swf.file.save("f90626fa.swf",django.core.files.File(f))
+f.close()
+swf.save()
+
+swf=None
+f=None
