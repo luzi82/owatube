@@ -61,5 +61,10 @@ def _reg_swf(swf_id,name,enabled,parser):
 _reg_swf("f90626fa","3.03. A",True,parse0)
 ## swf reg END
 
-#SWF_CHOICE=((swf.swf_id,swf.name)for swf in SWF_LIST)
-SWF_CHOICE=([("f90626fa","3.03. A")])
+SWF_CHOICE=[]
+for k,swf in SWF_LIST.iteritems():
+    if(swf.enabled==False):continue
+    t=(k,swf.name)
+    SWF_CHOICE.append(t)
+#SWF_CHOICE=[(swf.swf_id,swf.name)for swf in SWF_LIST]
+#SWF_CHOICE=[("f90626fa","3.03. A")]

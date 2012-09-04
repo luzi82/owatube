@@ -69,7 +69,10 @@ def get_game_bgm(request, game):
 
 @_check_game_entry
 def get_game_swf(request, game):
-    return HttpResponse(FileWrapper(game.swf.file),content_type="application/x-shockwave-flash")
+    return HttpResponse(
+        FileWrapper(open("%(root)s/res/%(id)s.swf"%{"root":settings.OWATUBE_PATH,"id":game.swf},"r")),
+        content_type="application/x-shockwave-flash"
+    )
 
 @login_required
 def add_game_comment(request):
@@ -94,8 +97,7 @@ def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
-            swf = request.POST['swf']
-            game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'],swf=swf)
+            game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'],swf=form.cleaned_data["swf"])
             game.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game.pk}))
     else:
