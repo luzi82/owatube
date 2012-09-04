@@ -7,9 +7,6 @@ VALID_ERR =-2
 VALID_FAIL=-1
 VALID_PASS=1
 # result
-RESULT_FAIL=-1
-RESULT_PASS=1
-RESULT_PERFECT=2
 # score
 # r0,r1,r2
 # maxcombo

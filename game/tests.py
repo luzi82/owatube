@@ -9,6 +9,7 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 import re
 import game.swf
+import game
 
 class SimpleTest(TestCase):
     
@@ -67,3 +68,31 @@ class SimpleTest(TestCase):
         m2=game.swf.parse0_re1.search(m.group("prove"))
         self.assertEqual(m2.group("code"),"16906247")
         self.assertEqual(m2.group("score"),"1026720")
+
+    def test_comment_parse(self):
+        text="""*太鼓のオワタツジン結果*Ver3.03
+曲名:凛として咲く花の如く
+曲:
+譜面:No.31
+コース:おわたコース(★7)
+ノルマクリア成功
+得点:1026720点
+判定:良 573/可 0/不可 0
+最大コンボ数:573回
+叩けた率:100%
+連打:118回
+オプション:なし
+譜面コード:16906247
+証明コード:
+#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
+        play_result=game.PlayResult(
+            result=game.RESULT_PASS,
+            score=1026720,
+            r0=573,r1=0,r2=0,
+            maxcombo=573,lenda=118,
+            option=0,
+            code=16906247
+        )
+        result=game.swf.parse("f90626fa",text)
+        self.assertEqual(result.original,text)
+        self.assertEqual(result.parts,[play_result])
