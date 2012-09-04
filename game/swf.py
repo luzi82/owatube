@@ -5,9 +5,8 @@ import re
 VALID_ERR =-2
 VALID_FAIL=-1
 VALID_PASS=1
-VALID_SURE=2
 # result
-RESULT_FAIL=0
+RESULT_FAIL=-1
 RESULT_PASS=1
 RESULT_PERFECT=2
 # score
@@ -45,8 +44,22 @@ def parse0(txt):
     if(m0.group("code")!=m1.group("code")):return {"valid":VALID_FAIL}
     if(m0.group("score")!=m1.group("score")):return {"valid":VALID_FAIL}
     # TODO
+    
+class Swf:
+    def __init__(self,swf_id,name,enabled,parser):
+        self.swf_id=swf_id
+        self.name=name
+        self.enabled=enabled
+        self.parser=parser
 
-# func, valid-check
-parser=[
-    [parse0,False]
-]
+SWF_LIST={}
+
+def _reg_swf(swf_id,name,enabled,parser):
+    SWF_LIST[swf_id]=Swf(swf_id,name,enabled,parser)
+
+## swf reg START
+_reg_swf("f90626fa","3.03. A",True,parse0)
+## swf reg END
+
+#SWF_CHOICE=((swf.swf_id,swf.name)for swf in SWF_LIST)
+SWF_CHOICE=(("f90626fa","3.03. A"))

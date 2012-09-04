@@ -8,15 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Swf'
-        db.create_table('game_swf', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=32)),
-            ('pars', self.gf('django.db.models.fields.IntegerField')(max_length=4)),
-        ))
-        db.send_create_signal('game', ['Swf'])
-
         # Adding model 'Game'
         db.create_table('game_game', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -24,15 +15,12 @@ class Migration(SchemaMigration):
             ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('bgm', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('swf', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Swf'])),
+            ('swf', self.gf('django.db.models.fields.CharField')(max_length=8)),
         ))
         db.send_create_signal('game', ['Game'])
 
 
     def backwards(self, orm):
-        # Deleting model 'Swf'
-        db.delete_table('game_swf')
-
         # Deleting model 'Game'
         db.delete_table('game_game')
 
@@ -81,14 +69,7 @@ class Migration(SchemaMigration):
             'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'swf': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Swf']"})
-        },
-        'game.swf': {
-            'Meta': {'object_name': 'Swf'},
-            'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'pars': ('django.db.models.fields.IntegerField', [], {'max_length': '4'})
+            'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'})
         }
     }
 

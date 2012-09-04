@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from game.models import Game, Swf
+from game.models import Game
 import urllib
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
+import game.swf
 
 ## helper function
 
@@ -93,7 +94,7 @@ def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
-            swf = Swf.objects.get(pk=request.POST['swf'])
+            swf = request.POST['swf']
             game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'],swf=swf)
             game.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game.pk}))
@@ -104,7 +105,7 @@ def add_game(request):
 class AddGameForm (forms.Form):
     data = forms.FileField()
     bgm = forms.FileField()
-    swf = forms.ModelChoiceField(queryset=Swf.objects.all(),empty_label=None)
+    swf = forms.ChoiceField(choices=game.swf.SWF_CHOICE)
     # pic
 
 @login_required
