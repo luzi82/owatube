@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import inspect
 
 # valid
 VALID_ERR =-2
@@ -47,15 +48,15 @@ def parse0(txt):
     
 class Swf:
     def __init__(self,swf_id,name,enabled,parser):
-        self.swf_id=swf_id
-        self.name=name
-        self.enabled=enabled
-        self.parser=parser
+        frame = inspect.currentframe()
+        args, _, _, values = inspect.getargvalues(frame)
+        for arg in args:
+            setattr(self,arg,values[arg])
 
 SWF_LIST={}
 
-def _reg_swf(swf_id,name,enabled,parser):
-    SWF_LIST[swf_id]=Swf(swf_id,name,enabled,parser)
+def _reg_swf(*args):
+    SWF_LIST[args[0]]=Swf(*args)
 
 ## swf reg START
 _reg_swf("f90626fa","3.03. A",True,parse0)
