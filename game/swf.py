@@ -62,4 +62,4 @@ _reg_swf("f90626fa","3.03. A",True,parse0)
 ## swf reg END
 
 #SWF_CHOICE=((swf.swf_id,swf.name)for swf in SWF_LIST)
-SWF_CHOICE=(("f90626fa","3.03. A"))
+SWF_CHOICE=([("f90626fa","3.03. A")])
