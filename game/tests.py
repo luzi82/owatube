@@ -8,7 +8,7 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 import re
-import game.check_score
+import game.swf
 
 class SimpleTest(TestCase):
     
@@ -51,7 +51,7 @@ class SimpleTest(TestCase):
 譜面コード:16906247
 証明コード:
 #!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-        m=game.check_score.parse0_re0.search(text)
+        m=game.swf.parse0_re0.search(text)
         self.assertIsNotNone(m)
         self.assertEqual(m.group("result"),"成功")
         self.assertEqual(m.group("score"),"1026720")
@@ -64,6 +64,6 @@ class SimpleTest(TestCase):
         self.assertEqual(m.group("code"),"16906247")
         self.assertEqual(m.group("prove"),"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
         
-        m2=game.check_score.parse0_re1.search(m.group("prove"))
+        m2=game.swf.parse0_re1.search(m.group("prove"))
         self.assertEqual(m2.group("code"),"16906247")
         self.assertEqual(m2.group("score"),"1026720")
