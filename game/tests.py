@@ -209,3 +209,11 @@ Hello B
 """
         result=game.swf.parse("f90626fa",text)
         self.assertEqual(result,["Hello A",play_result,"Hello B"])
+
+        text="""Hello A\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHello B"""
+        result=game.swf.parse("f90626fa",text)
+        self.assertEqual(result,["Hello A\n\nHello B"])
+
+        text="""Hello A\nHello B"""
+        result=game.swf.parse("f90626fa",text)
+        self.assertEqual(result,["Hello A\nHello B"])
