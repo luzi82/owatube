@@ -10,6 +10,8 @@ from django.test import TestCase
 import re
 import game.swf
 import game
+from django.contrib.auth.models import User
+from django.test.client import Client
 
 class SimpleTest(TestCase):
     
@@ -217,3 +219,18 @@ Hello B
         text="""Hello A\nHello B"""
         result=game.swf.parse("f90626fa",text)
         self.assertEqual(result,["Hello A\nHello B"])
+
+    def test_add_game(self):
+        User.objects.create_user("submitter",password="asdf")
+
+        client = Client()
+        client.login(username="submitter",password="asdf")
+        
+        data_f=open("game/test_res/data.txt")
+        bgm_f=open("game/test_res/bgm.mp3")
+        response = client.post("/game/upload/", {
+            "data":data_f,
+            "bgm":bgm_f,
+            "swf":"f90626fa",
+        })
+        self.assertRedirects(response,"/g/1/")
