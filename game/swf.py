@@ -25,7 +25,7 @@ DIFF_MAP={
 class BadProve(Exception):
     pass
 
-parse0_re0=re.compile("""(\*太鼓のオワタツジン結果\*Ver3\.03
+parse_report_0_re0=re.compile("""(\*太鼓のオワタツジン結果\*Ver3\.03
 曲名:(?P<title>[^\\n]*)
 曲:[^\\n]*
 譜面:[^\\n]*
@@ -41,19 +41,19 @@ parse0_re0=re.compile("""(\*太鼓のオワタツジン結果\*Ver3\.03
 証明コード:
 (?P<prove>#!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#))""")
     
-parse0_re1=re.compile("#!#(?P<code>[0-9]+)!#(?P<score>[0-9]+)!#31345!#15589489!#23726650!#")
+parse_report_0_re1=re.compile("#!#(?P<code>[0-9]+)!#(?P<score>[0-9]+)!#31345!#15589489!#23726650!#")
 
-def parse0(txt):
+def parse_report_0(txt):
     buf=txt
     a1=[]
     
     while len(buf)!=0:
-        m0=parse0_re0.search(buf)
+        m0=parse_report_0_re0.search(buf)
         if(m0==None):
             a1.append(buf)
             break
         a1.append(buf[0:m0.start()])
-        m1=parse0_re1.search(m0.group("prove"))
+        m1=parse_report_0_re1.search(m0.group("prove"))
         if(m0.group("code")!=m1.group("code")):raise BadProve()
         if(m0.group("score")!=m1.group("score")):raise BadProve()
         a1.append(game.PlayResult(
@@ -100,7 +100,7 @@ def _reg_swf(*args):
     SWF_LIST[args[0]]=Swf(*args)
 
 ## swf reg START
-_reg_swf("f90626fa","3.03. A",True,parse0)
+_reg_swf("f90626fa","3.03. A",True,parse_report_0)
 ## swf reg END
 
 SWF_CHOICE=[]
