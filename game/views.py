@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
 import game.swf
+import pprint
+import magic
 
 ## helper function
 
@@ -109,6 +111,19 @@ class AddGameForm (forms.Form):
     bgm = forms.FileField()
     swf = forms.ChoiceField(choices=game.swf.SWF_CHOICE)
     # pic
+    
+    def clean_data(self):
+        data = self.cleaned_data['data']
+        filename=data.file.name
+
+        ms = magic.open(magic.MAGIC_MIME)
+        ms.load()
+        t=ms.file(filename)
+        ms.close()
+
+        if(not t.startswith("text/plain")):raise forms.ValidationError("Not text file")
+        
+        return data
 
 @login_required
 def edit_game(request, game_entry):

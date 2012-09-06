@@ -234,3 +234,18 @@ Hello B
             "swf":"f90626fa",
         })
         self.assertRedirects(response,"/g/1/")
+
+    def test_add_game_data_err(self):
+        User.objects.create_user("submitter",password="asdf")
+
+        client = Client()
+        client.login(username="submitter",password="asdf")
+        
+        data_f=open("game/test_res/bgm.mp3")
+        bgm_f=open("game/test_res/bgm.mp3")
+        response = client.post("/game/upload/", {
+            "data":data_f,
+            "bgm":bgm_f,
+            "swf":"f90626fa",
+        })
+        self.assertTemplateUsed(response, "game/add_game.tmpl")
