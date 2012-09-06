@@ -116,12 +116,12 @@ class AddGameForm (forms.Form):
         data = self.cleaned_data['data']
         filename=data.file.name
 
-        ms = magic.open(magic.MAGIC_MIME)
+        ms = magic.open(magic.MAGIC_MIME_TYPE)
         ms.load()
         t=ms.file(filename)
         ms.close()
 
-        if(not t.startswith("text/plain")):raise forms.ValidationError("Not text file")
+        if(t!="text/plain"):raise forms.ValidationError("Not text file")
         
         return data
 
