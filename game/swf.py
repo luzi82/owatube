@@ -3,6 +3,7 @@ import re
 import inspect
 import game
 import pprint
+import chardet
 
 # valid
 # result
@@ -86,7 +87,36 @@ def parse_report_0(txt):
             a1.append(y)
     
     return a1
+
+# title, music_by, data_by, diff[]
+def parse_data_0(filename):
+    f=open(filename)
+    buf=f.read()
+    encoding=chardet.detect(buf)["encoding"]
+    content=buf.decode(encoding).encode("utf-8")
     
+    ret={
+        "title":None,
+        "music_by":None,
+        "data_by":None,
+        "diff":[0,0,0,0],
+    }
+    m=re.search("^&title=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["title"]=m.group(1).strip()
+    m=re.search("^&music_by=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["music_by"]=m.group(1).strip()
+    m=re.search("^&data_by=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["data_by"]=m.group(1).strip()
+    m=re.search("^&level1=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["diff"][0]=int(m.group(1).strip())
+    m=re.search("^&level2=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["diff"][1]=int(m.group(1).strip())
+    m=re.search("^&level3=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["diff"][2]=int(m.group(1).strip())
+    m=re.search("^&level4=(.*)$",content,flags=re.MULTILINE)
+    if m != None:ret["diff"][3]=int(m.group(1).strip())
+    return ret
+
 class Swf:
     def __init__(self,swf_id,name,enabled,report_parser):
         frame = inspect.currentframe()
