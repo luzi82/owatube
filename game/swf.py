@@ -88,7 +88,7 @@ def parse_report_0(txt):
     return a1
     
 class Swf:
-    def __init__(self,swf_id,name,enabled,parser):
+    def __init__(self,swf_id,name,enabled,report_parser):
         frame = inspect.currentframe()
         args, _, _, values = inspect.getargvalues(frame)
         for arg in args:
@@ -112,4 +112,4 @@ for k,swf in SWF_LIST.iteritems():
 #SWF_CHOICE=[("f90626fa","3.03. A")]
 
 def parse(key,txt):
-    return SWF_LIST[key].parser(txt)
+    return SWF_LIST[key].report_parser(txt)
