@@ -11,6 +11,7 @@ from django.conf import settings
 import game.swf
 import pprint
 import magic
+import django.core.files.uploadedfile
 
 ## helper function
 
@@ -114,16 +115,29 @@ class AddGameForm (forms.Form):
     
     def clean_data(self):
         data = self.cleaned_data['data']
-        filename=data.file.name
+        buf=data.read()
 
         ms = magic.open(magic.MAGIC_MIME_TYPE)
         ms.load()
-        t=ms.file(filename)
+        t=ms.buffer(buf)
         ms.close()
 
         if(t!="text/plain"):raise forms.ValidationError("Not text file")
         
         return data
+    
+    def clean_bgm(self):
+        bgm = self.cleaned_data['bgm']
+        buf=bgm.read()
+
+        ms = magic.open(magic.MAGIC_MIME_TYPE)
+        ms.load()
+        t=ms.buffer(buf)
+        ms.close()
+
+        if(t!="audio/mpeg"):raise forms.ValidationError("Not mp3 file")
+        
+        return bgm
 
 @login_required
 def edit_game(request, game_entry):

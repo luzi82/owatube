@@ -226,8 +226,8 @@ Hello B
         client = Client()
         client.login(username="submitter",password="asdf")
         
-        data_f=open("game/test_res/data.txt")
-        bgm_f=open("game/test_res/bgm.mp3")
+        data_f=open("game/test_res/data.txt","r")
+        bgm_f=open("game/test_res/bgm.mp3","r")
         response = client.post("/game/upload/", {
             "data":data_f,
             "bgm":bgm_f,
@@ -241,8 +241,23 @@ Hello B
         client = Client()
         client.login(username="submitter",password="asdf")
         
-        data_f=open("game/test_res/bgm.mp3")
-        bgm_f=open("game/test_res/bgm.mp3")
+        data_f=open("game/test_res/bgm.mp3","r")
+        bgm_f=open("game/test_res/bgm.mp3","r")
+        response = client.post("/game/upload/", {
+            "data":data_f,
+            "bgm":bgm_f,
+            "swf":"f90626fa",
+        })
+        self.assertTemplateUsed(response, "game/add_game.tmpl")
+
+    def test_add_game_bgm_err(self):
+        User.objects.create_user("submitter",password="asdf")
+
+        client = Client()
+        client.login(username="submitter",password="asdf")
+        
+        data_f=open("game/test_res/data.txt","r")
+        bgm_f=open("game/test_res/data.txt","r")
         response = client.post("/game/upload/", {
             "data":data_f,
             "bgm":bgm_f,
