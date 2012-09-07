@@ -251,9 +251,6 @@ Hello B
         self.assertTemplateUsed(response, "game/add_game.tmpl")
 
     def test_parse_data(self):
-#        f = open("game/test_res/data.txt")
-#        content = f.read()
-#        ret = game.swf.parse_data_0(content)
         ret = game.swf.parse_data_0("game/test_res/data.txt")
         self.assertEqual(ret["title"], "凛として咲く花の如く")
         self.assertEqual(ret["music_by"], "")
