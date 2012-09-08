@@ -16,11 +16,12 @@ import chardet
 # code
 # prove
 
+# start from 0, since of array index
 DIFF_MAP={
-    "かんたん":1,
-    "ふつう":2,
-    "むずかしい":3,
-    "おわた":4,
+    "かんたん":0,
+    "ふつう":1,
+    "むずかしい":2,
+    "おわた":3,
 }
 
 class BadProve(Exception):
@@ -89,9 +90,9 @@ def parse_report_0(txt):
     return a1
 
 # title, music_by, data_by, diff[]
-def parse_data_0(filename):
-    f=open(filename)
-    buf=f.read()
+def parse_data_0(buf):
+#    f=open(filename)
+#    buf=f.read()
     encoding=chardet.detect(buf)["encoding"]
     content=buf.decode(encoding).encode("utf-8")
     
@@ -118,7 +119,7 @@ def parse_data_0(filename):
     return ret
 
 class Swf:
-    def __init__(self,swf_id,name,enabled,report_parser):
+    def __init__(self,swf_id,name,enabled,report_parser,data_parser):
         frame = inspect.currentframe()
         args, _, _, values = inspect.getargvalues(frame)
         for arg in args:
@@ -130,7 +131,7 @@ def _reg_swf(*args):
     SWF_LIST[args[0]]=Swf(*args)
 
 ## swf reg START
-_reg_swf("f90626fa","3.03. A",True,parse_report_0)
+_reg_swf("f90626fa","3.03. A",True,parse_report_0,parse_data_0)
 ## swf reg END
 
 SWF_CHOICE=[]
@@ -143,3 +144,6 @@ for k,swf in SWF_LIST.iteritems():
 
 def parse(key,txt):
     return SWF_LIST[key].report_parser(txt)
+
+def parse_data(key,buf):
+    return SWF_LIST[key].data_parser(buf)

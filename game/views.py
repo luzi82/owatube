@@ -100,9 +100,21 @@ def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
-            game = Game(author=request.user,data=request.FILES['data'],bgm=request.FILES['bgm'],swf=form.cleaned_data["swf"])
-            game.save()
-            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game.pk}))
+            swf_key = form.cleaned_data["swf"]
+            data_f=form.cleaned_data["data"];data_f.open()
+            data_buf = data_f.read()
+            data_data = game.swf.parse_data(swf_key, data_buf)
+            db_game = Game(
+                author=request.user,
+                title=data_data["title"],
+                music_by=data_data["music_by"],
+                data_by=data_data["data_by"],
+                data=request.FILES['data'],
+                bgm=request.FILES['bgm'],
+                swf=swf_key
+            )
+            db_game.save()
+            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
     else:
         form = AddGameForm()
     return render(request,"game/add_game.tmpl",{"form":form})
@@ -114,7 +126,7 @@ class AddGameForm (forms.Form):
     # pic
     
     def clean_data(self):
-        data = self.cleaned_data['data']
+        data = self.cleaned_data['data'];data.open()
         buf=data.read()
 
         ms = magic.open(magic.MAGIC_MIME_TYPE)
@@ -127,7 +139,7 @@ class AddGameForm (forms.Form):
         return data
     
     def clean_bgm(self):
-        bgm = self.cleaned_data['bgm']
+        bgm = self.cleaned_data['bgm'];bgm.open()
         buf=bgm.read()
 
         ms = magic.open(magic.MAGIC_MIME_TYPE)

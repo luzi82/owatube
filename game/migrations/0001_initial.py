@@ -12,6 +12,9 @@ class Migration(SchemaMigration):
         db.create_table('game_game', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('music_by', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('data_by', self.gf('django.db.models.fields.CharField')(max_length=64)),
             ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('bgm', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
@@ -19,10 +22,22 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('game', ['Game'])
 
+        # Adding model 'GameDiff'
+        db.create_table('game_gamediff', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
+            ('diff', self.gf('django.db.models.fields.IntegerField')()),
+            ('star', self.gf('django.db.models.fields.IntegerField')()),
+        ))
+        db.send_create_signal('game', ['GameDiff'])
+
 
     def backwards(self, orm):
         # Deleting model 'Game'
         db.delete_table('game_game')
+
+        # Deleting model 'GameDiff'
+        db.delete_table('game_gamediff')
 
 
     models = {
@@ -68,8 +83,18 @@ class Migration(SchemaMigration):
             'bgm': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'data_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'})
+            'music_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+        },
+        'game.gamediff': {
+            'Meta': {'object_name': 'GameDiff'},
+            'diff': ('django.db.models.fields.IntegerField', [], {}),
+            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'star': ('django.db.models.fields.IntegerField', [], {})
         }
     }
 

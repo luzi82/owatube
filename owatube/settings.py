@@ -164,3 +164,7 @@ AUTHENTICATION_BACKENDS = (
     'member.backends.OwtForumBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+OWATA_TITLE_SIZE = 64
+OWATA_MUSICBY_SIZE = 64
+OWATA_DATABY_SIZE = 64

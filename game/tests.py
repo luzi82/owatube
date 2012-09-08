@@ -88,7 +88,7 @@ class SimpleTest(TestCase):
 証明コード:
 #!#16906247!#1026720!#31345!#15589489!#23726650!#"""
         play_result=game.PlayResult(
-            diff=4,ura=False,
+            diff=3,ura=False,
             result=True,
             score=1026720,
             r0=573,r1=0,r2=0,
@@ -266,7 +266,8 @@ Hello B
         self.assertTemplateUsed(response, "game/add_game.tmpl")
 
     def test_parse_data(self):
-        ret = game.swf.parse_data_0("game/test_res/data.txt")
+        data_buf = open("game/test_res/data.txt","r").read()
+        ret = game.swf.parse_data_0(data_buf)
         self.assertEqual(ret["title"], "凛として咲く花の如く")
         self.assertEqual(ret["music_by"], "")
         self.assertEqual(ret["data_by"], "No.31")
