@@ -234,6 +234,26 @@ Hello B
             "swf":"f90626fa",
         })
         self.assertRedirects(response,"/g/1/")
+        
+        game_data = game.models.Game.objects.get(pk=1)
+
+        try:
+            game.models.GameDiff.objects.get(game=game_data,diff=0)
+            self.fail()
+        except game.models.GameDiff.DoesNotExist:pass
+
+        try:
+            game.models.GameDiff.objects.get(game=game_data,diff=1)
+            self.fail()
+        except game.models.GameDiff.DoesNotExist:pass
+
+        try:
+            game.models.GameDiff.objects.get(game=game_data,diff=2)
+            self.fail()
+        except game.models.GameDiff.DoesNotExist:pass
+        
+        tmp = game.models.GameDiff.objects.get(game=game_data,diff=3)
+        self.assertEqual(tmp.star, 7)
 
     def test_add_game_data_err(self):
         User.objects.create_user("submitter",password="asdf")

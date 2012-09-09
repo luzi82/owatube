@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from game.models import Game
 import urllib
 from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
@@ -33,9 +32,9 @@ def _check_u(f):
 def _check_game_entry(f):
     def ff(request,game_entry,*args,**kwargs):
         try:
-            game = Game.objects.get(pk = game_entry)
-            return f(request,*args,game=game,**kwargs)
-        except Game.DoesNotExist:
+            game_data = game.models.Game.objects.get(pk = game_entry)
+            return f(request,*args,game=game_data,**kwargs)
+        except game.models.Game.DoesNotExist:
             return HttpResponseRedirect(reverse("game.views.index"))
     return ff
 
@@ -54,7 +53,7 @@ def get_game_score_list(request, user):
 
 @_check_u
 def get_game_list(request, user):
-    game_list = Game.objects.filter(author__exact=user)
+    game_list = game.models.Game.objects.filter(author__exact=user)
     return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
 
 @_check_game_entry
@@ -104,7 +103,7 @@ def add_game(request):
             data_f=form.cleaned_data["data"];data_f.open()
             data_buf = data_f.read()
             data_data = game.swf.parse_data(swf_key, data_buf)
-            db_game = Game(
+            db_game = game.models.Game(
                 author=request.user,
                 title=data_data["title"],
                 music_by=data_data["music_by"],
@@ -114,6 +113,15 @@ def add_game(request):
                 swf=swf_key
             )
             db_game.save()
+            for i in range(len(data_data["diff"])):
+                star = data_data["diff"][i]
+                if star==0:continue
+                db_gamediff = game.models.GameDiff(
+                    game = db_game,
+                    diff = i,
+                    star = star,
+                )
+                db_gamediff.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
     else:
         form = AddGameForm()
