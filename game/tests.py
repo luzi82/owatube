@@ -9,7 +9,6 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 import re
 import game.swf
-import game
 from django.contrib.auth.models import User
 from django.test.client import Client
 
@@ -236,6 +235,9 @@ Hello B
         self.assertRedirects(response,"/g/1/")
         
         game_data = game.models.Game.objects.get(pk=1)
+        self.assertEqual(game_data.title,u"凛として咲く花の如く")
+        self.assertEqual(game_data.music_by,"")
+        self.assertEqual(game_data.data_by,"No.31")
 
         try:
             game.models.GameDiff.objects.get(game=game_data,diff=0)
