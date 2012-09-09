@@ -7,7 +7,7 @@
 {% block main %}
 <ul>
 	{% for game in game_list %}
-		<li><a href="{% url 'game.views.get_game' game_entry=game.id %}">{{ game.id }}</a></li>
+		<li><a href="{% url 'game.views.get_game' game_entry=game.id %}">{{ game.title }}</a></li>
 	{% endfor %}
 </ul>
 {% endblock %}
