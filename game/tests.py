@@ -11,6 +11,7 @@ import re
 import game.swf
 from django.contrib.auth.models import User
 from django.test.client import Client
+import pprint
 
 class SimpleTest(TestCase):
     
@@ -55,7 +56,7 @@ class SimpleTest(TestCase):
 #!#16906247!#1026720!#31345!#15589489!#23726650!#"""
         m=game.swf.parse_report_0_re0.search(text)
         self.assertIsNotNone(m)
-        self.assertEqual(m.group("result"),"成功")
+        self.assertEqual(m.group("success"),"成功")
         self.assertEqual(m.group("score"),"1026720")
         self.assertEqual(m.group("r0"),"573")
         self.assertEqual(m.group("r1"),"0")
@@ -88,7 +89,7 @@ class SimpleTest(TestCase):
 #!#16906247!#1026720!#31345!#15589489!#23726650!#"""
         play_result=game.PlayResult(
             diff=3,ura=False,
-            result=True,
+            success=True,
             score=1026720,
             r0=573,r1=0,r2=0,
             maxcombo=573,lenda=118,
@@ -294,3 +295,52 @@ Hello B
         self.assertEqual(ret["music_by"], "")
         self.assertEqual(ret["data_by"], "No.31")
         self.assertEqual(ret["diff"], [0,0,0,7])
+
+    def test_add_game_comment(self):
+        User.objects.create_user("submitter",password="asdf")
+        
+        client = Client()
+        client.login(username="submitter",password="asdf")
+        
+        data_f=open("game/test_res/data.txt","r")
+        bgm_f=open("game/test_res/bgm.mp3","r")
+        client.post("/game/upload/", {
+            "data":data_f,
+            "bgm":bgm_f,
+            "swf":"f90626fa",
+        })
+
+        comment="""*太鼓のオワタツジン結果*Ver3.03
+曲名:凛として咲く花の如く
+曲:
+譜面:No.31
+コース:おわたコース(★7)
+ノルマクリア成功
+得点:1026720点
+判定:良 573/可 0/不可 0
+最大コンボ数:573回
+叩けた率:100%
+連打:118回
+オプション:なし
+譜面コード:16906247
+証明コード:
+#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
+#        pprint.pprint(comment)
+#        comment=comment.encode("utf-8")
+        client.post("/game/comment/", {
+            "game_entry":"1",
+            "comment":comment,
+        })
+        scorereport_data=game.models.ScoreReport.objects.get(pk=1)
+        self.assertEqual(scorereport_data.game.pk,1)
+        self.assertEqual(scorereport_data.player.username,"submitter")
+        self.assertEqual(scorereport_data.diff,3)
+        self.assertEqual(scorereport_data.ura,False)
+        self.assertEqual(scorereport_data.success,True)
+        self.assertEqual(scorereport_data.r0,573)
+        self.assertEqual(scorereport_data.r1,0)
+        self.assertEqual(scorereport_data.r2,0)
+        self.assertEqual(scorereport_data.maxcombo,573)
+        self.assertEqual(scorereport_data.lenda,118)
+        self.assertEqual(scorereport_data.code,16906247)
+        self.assertEqual(scorereport_data.original,comment.decode("utf-8"))

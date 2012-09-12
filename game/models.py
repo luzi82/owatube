@@ -16,3 +16,17 @@ class GameDiff(models.Model):
     game = models.ForeignKey(Game)
     diff = models.IntegerField()
     star = models.IntegerField()
+
+class ScoreReport(models.Model):
+    game = models.ForeignKey(Game)
+    player = models.ForeignKey(auth_models.User)
+    diff = models.IntegerField()
+    ura = models.BooleanField()
+    success = models.BooleanField()
+    r0 = models.IntegerField()
+    r1 = models.IntegerField()
+    r2 = models.IntegerField()
+    maxcombo = models.IntegerField()
+    lenda = models.IntegerField()
+    code = models.IntegerField()
+    original = models.TextField(max_length=1000)

@@ -6,7 +6,7 @@ import pprint
 import chardet
 
 # valid
-# result
+# success
 # score
 # r0,r1,r2
 # maxcombo
@@ -27,20 +27,20 @@ DIFF_MAP={
 class BadProve(Exception):
     pass
 
-parse_report_0_re0=re.compile("""(\*太鼓のオワタツジン結果\*Ver3\.03
-曲名:(?P<title>[^\\n]*)
-曲:[^\\n]*
-譜面:[^\\n]*
-コース:(?P<diff>(かんたん)|(ふつう)|(むずかしい)|(おわた))[^\\n]*
-ノルマクリア(?P<result>(成功)|(失敗))
-得点:(?P<score>[0-9]+)点
-判定:良 (?P<r0>[0-9]+)/可 (?P<r1>[0-9]+)/不可 (?P<r2>[0-9]+)
-最大コンボ数:(?P<maxcombo>[0-9]+)回
-叩けた率:([0-9]+)%
-連打:(?P<lenda>[0-9]+)回
-オプション:(?P<option>[^\\n]+)
-譜面コード:(?P<code>[0-9]+)
-証明コード:
+parse_report_0_re0=re.compile("""(\*太鼓のオワタツジン結果\*Ver3\.03(\\r)?
+曲名:(?P<title>[^\\r\\n]*)(\\r)?
+曲:[^\\r\\n]*(\\r)?
+譜面:[^\\r\\n]*(\\r)?
+コース:(?P<diff>(かんたん)|(ふつう)|(むずかしい)|(おわた))[^\\r\\n]*(\\r)?
+ノルマクリア(?P<success>(成功)|(失敗))(\\r)?
+得点:(?P<score>[0-9]+)点(\\r)?
+判定:良 (?P<r0>[0-9]+)/可 (?P<r1>[0-9]+)/不可 (?P<r2>[0-9]+)(\\r)?
+最大コンボ数:(?P<maxcombo>[0-9]+)回(\\r)?
+叩けた率:([0-9]+)%(\\r)?
+連打:(?P<lenda>[0-9]+)回(\\r)?
+オプション:(?P<option>[^\\r\\n]+)(\\r)?
+譜面コード:(?P<code>[0-9]+)(\\r)?
+証明コード:(\\r)?
 (?P<prove>#!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#[0-9]+!#))""")
     
 parse_report_0_re1=re.compile("#!#(?P<code>[0-9]+)!#(?P<score>[0-9]+)!#31345!#15589489!#23726650!#")
@@ -61,7 +61,7 @@ def parse_report_0(txt):
         a1.append(game.PlayResult(
             diff=DIFF_MAP[m0.group("diff")],
             ura=m0.group("title").endswith("(裏)"),
-            result=(m0.group("result")=="成功"),
+            success=(m0.group("success")=="成功"),
             score=int(m0.group("score")),
             r0=int(m0.group("r0")),
             r1=int(m0.group("r1")),
@@ -86,7 +86,7 @@ def parse_report_0(txt):
         y=re.sub("\n$","",y)
         if len(y)!=0:
             a1.append(y)
-    
+            
     return a1
 
 # title, music_by, data_by, diff[]

@@ -31,6 +31,24 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('game', ['GameDiff'])
 
+        # Adding model 'ScoreReport'
+        db.create_table('game_scorereport', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
+            ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('diff', self.gf('django.db.models.fields.IntegerField')()),
+            ('ura', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('success', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('r0', self.gf('django.db.models.fields.IntegerField')()),
+            ('r1', self.gf('django.db.models.fields.IntegerField')()),
+            ('r2', self.gf('django.db.models.fields.IntegerField')()),
+            ('maxcombo', self.gf('django.db.models.fields.IntegerField')()),
+            ('lenda', self.gf('django.db.models.fields.IntegerField')()),
+            ('code', self.gf('django.db.models.fields.IntegerField')()),
+            ('original', self.gf('django.db.models.fields.TextField')(max_length=1000)),
+        ))
+        db.send_create_signal('game', ['ScoreReport'])
+
 
     def backwards(self, orm):
         # Deleting model 'Game'
@@ -38,6 +56,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'GameDiff'
         db.delete_table('game_gamediff')
+
+        # Deleting model 'ScoreReport'
+        db.delete_table('game_scorereport')
 
 
     models = {
@@ -95,6 +116,22 @@ class Migration(SchemaMigration):
             'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'star': ('django.db.models.fields.IntegerField', [], {})
+        },
+        'game.scorereport': {
+            'Meta': {'object_name': 'ScoreReport'},
+            'code': ('django.db.models.fields.IntegerField', [], {}),
+            'diff': ('django.db.models.fields.IntegerField', [], {}),
+            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'lenda': ('django.db.models.fields.IntegerField', [], {}),
+            'maxcombo': ('django.db.models.fields.IntegerField', [], {}),
+            'original': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
+            'player': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'r0': ('django.db.models.fields.IntegerField', [], {}),
+            'r1': ('django.db.models.fields.IntegerField', [], {}),
+            'r2': ('django.db.models.fields.IntegerField', [], {}),
+            'success': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'ura': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         }
     }
 

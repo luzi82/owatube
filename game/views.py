@@ -8,9 +8,8 @@ from django.contrib.auth.models import User
 from django.core.servers.basehttp import FileWrapper
 from django.conf import settings
 import game.swf
-import pprint
 import magic
-import django.core.files.uploadedfile
+import pprint
 
 ## helper function
 
@@ -82,7 +81,30 @@ def add_game_comment(request):
         comment_form = AddGameCommentForm(request.POST)
         if comment_form.is_valid():
             game_entry = comment_form.cleaned_data["game_entry"]
+            game_data = game.models.Game.objects.get(pk=game_entry)
             comment = comment_form.cleaned_data["comment"]
+#            pprint.pprint(comment)
+            comment = comment.encode("utf-8")
+#            pprint.pprint(comment)
+            comment = game.swf.parse(game_data.swf, comment)
+#            pprint.pprint(comment)
+            for pr in comment:
+                if not isinstance(pr,game.PlayResult):continue
+                scorereport_data=game.models.ScoreReport(
+                    game = game_data,
+                    player = request.user,
+                    diff = pr.diff,
+                    ura = pr.ura,
+                    success = pr.success,
+                    r0 = pr.r0,
+                    r1 = pr.r1,
+                    r2 = pr.r2,
+                    maxcombo = pr.maxcombo,
+                    lenda = pr.lenda,
+                    code = pr.code,
+                    original = pr.original,
+                )
+                scorereport_data.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))
     return HttpResponseRedirect(reverse("game.views.index"))
 

@@ -3,7 +3,16 @@ import pprint
 
 class PlayResult:
     
-    def __init__(self,diff,ura,result,score,r0,r1,r2,maxcombo,lenda,option,code,original):
+    # diff: int
+    # ura: bool
+    # success: bool
+    # r0,r1,r2: int
+    # maxcombo: int
+    # lenda: int
+    # option: int # change later
+    # code: int
+    # original: str
+    def __init__(self,diff,ura,success,score,r0,r1,r2,maxcombo,lenda,option,code,original):
         frame = inspect.currentframe()
         args, _, _, values = inspect.getargvalues(frame)
         for arg in args:
