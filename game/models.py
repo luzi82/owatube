@@ -16,10 +16,20 @@ class GameDiff(models.Model):
     game = models.ForeignKey(Game)
     diff = models.IntegerField()
     star = models.IntegerField()
-
-class ScoreReport(models.Model):
+    
+class GameComment(models.Model):
     game = models.ForeignKey(Game)
+    create_date = models.DateTimeField(auto_now=True)
     player = models.ForeignKey(auth_models.User)
+
+class GameCommentContent(models.Model):
+    parent = models.ForeignKey(GameComment)
+    part = models.IntegerField()
+    content = models.TextField(max_length=1000)
+    is_score = models.BooleanField()
+    
+class ScoreReport(models.Model):
+    parent = models.ForeignKey(GameCommentContent)
     diff = models.IntegerField()
     ura = models.BooleanField()
     success = models.BooleanField()
@@ -29,4 +39,3 @@ class ScoreReport(models.Model):
     maxcombo = models.IntegerField()
     lenda = models.IntegerField()
     code = models.IntegerField()
-    original = models.TextField(max_length=1000)

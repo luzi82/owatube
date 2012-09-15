@@ -31,11 +31,29 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('game', ['GameDiff'])
 
+        # Adding model 'GameComment'
+        db.create_table('game_gamecomment', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
+            ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+        ))
+        db.send_create_signal('game', ['GameComment'])
+
+        # Adding model 'GameCommentContent'
+        db.create_table('game_gamecommentcontent', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.GameComment'])),
+            ('part', self.gf('django.db.models.fields.IntegerField')()),
+            ('content', self.gf('django.db.models.fields.TextField')(max_length=1000)),
+            ('is_score', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('game', ['GameCommentContent'])
+
         # Adding model 'ScoreReport'
         db.create_table('game_scorereport', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
-            ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.GameCommentContent'])),
             ('diff', self.gf('django.db.models.fields.IntegerField')()),
             ('ura', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('success', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -45,7 +63,6 @@ class Migration(SchemaMigration):
             ('maxcombo', self.gf('django.db.models.fields.IntegerField')()),
             ('lenda', self.gf('django.db.models.fields.IntegerField')()),
             ('code', self.gf('django.db.models.fields.IntegerField')()),
-            ('original', self.gf('django.db.models.fields.TextField')(max_length=1000)),
         ))
         db.send_create_signal('game', ['ScoreReport'])
 
@@ -56,6 +73,12 @@ class Migration(SchemaMigration):
 
         # Deleting model 'GameDiff'
         db.delete_table('game_gamediff')
+
+        # Deleting model 'GameComment'
+        db.delete_table('game_gamecomment')
+
+        # Deleting model 'GameCommentContent'
+        db.delete_table('game_gamecommentcontent')
 
         # Deleting model 'ScoreReport'
         db.delete_table('game_scorereport')
@@ -110,6 +133,21 @@ class Migration(SchemaMigration):
             'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '64'})
         },
+        'game.gamecomment': {
+            'Meta': {'object_name': 'GameComment'},
+            'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'player': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+        },
+        'game.gamecommentcontent': {
+            'Meta': {'object_name': 'GameCommentContent'},
+            'content': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_score': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.GameComment']"}),
+            'part': ('django.db.models.fields.IntegerField', [], {})
+        },
         'game.gamediff': {
             'Meta': {'object_name': 'GameDiff'},
             'diff': ('django.db.models.fields.IntegerField', [], {}),
@@ -121,12 +159,10 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ScoreReport'},
             'code': ('django.db.models.fields.IntegerField', [], {}),
             'diff': ('django.db.models.fields.IntegerField', [], {}),
-            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lenda': ('django.db.models.fields.IntegerField', [], {}),
             'maxcombo': ('django.db.models.fields.IntegerField', [], {}),
-            'original': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
-            'player': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.GameCommentContent']"}),
             'r0': ('django.db.models.fields.IntegerField', [], {}),
             'r1': ('django.db.models.fields.IntegerField', [], {}),
             'r2': ('django.db.models.fields.IntegerField', [], {}),

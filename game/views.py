@@ -83,28 +83,45 @@ def add_game_comment(request):
             game_entry = comment_form.cleaned_data["game_entry"]
             game_data = game.models.Game.objects.get(pk=game_entry)
             comment = comment_form.cleaned_data["comment"]
-#            pprint.pprint(comment)
             comment = comment.encode("utf-8")
-#            pprint.pprint(comment)
             comment = game.swf.parse(game_data.swf, comment)
-#            pprint.pprint(comment)
-            for pr in comment:
-                if not isinstance(pr,game.PlayResult):continue
-                scorereport_data=game.models.ScoreReport(
-                    game = game_data,
-                    player = request.user,
-                    diff = pr.diff,
-                    ura = pr.ura,
-                    success = pr.success,
-                    r0 = pr.r0,
-                    r1 = pr.r1,
-                    r2 = pr.r2,
-                    maxcombo = pr.maxcombo,
-                    lenda = pr.lenda,
-                    code = pr.code,
-                    original = pr.original,
+            
+            db_gc = game.models.GameComment(
+                game = game_data,
+                player = request.user,
+            )
+            db_gc.save()
+            
+            for ci in xrange(len(comment)):
+                c = comment[ci]
+                
+                if isinstance(c,str):
+                    content = c
+                elif isinstance(c,game.PlayResult):
+                    content = c.original
+                    
+                db_gcc = game.models.GameCommentContent(
+                     parent = db_gc,
+                     part = ci,
+                     content = content,
+                     is_score = isinstance(c,game.PlayResult),
                 )
-                scorereport_data.save()
+                db_gcc.save()
+                
+                if isinstance(c,game.PlayResult):
+                    scorereport_data=game.models.ScoreReport(
+                        parent = db_gcc,
+                        diff = c.diff,
+                        ura = c.ura,
+                        success = c.success,
+                        r0 = c.r0,
+                        r1 = c.r1,
+                        r2 = c.r2,
+                        maxcombo = c.maxcombo,
+                        lenda = c.lenda,
+                        code = c.code,
+                    )
+                    scorereport_data.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))
     return HttpResponseRedirect(reverse("game.views.index"))
 
