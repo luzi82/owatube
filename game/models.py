@@ -42,4 +42,5 @@ class ScoreReport(models.Model):
     lenda = models.IntegerField()
     code = models.IntegerField()
     
-    best = models.BooleanField()
+class ScoreReportBest(models.Model):
+    report = models.ForeignKey(ScoreReport)

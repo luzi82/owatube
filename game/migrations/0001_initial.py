@@ -65,9 +65,15 @@ class Migration(SchemaMigration):
             ('maxcombo', self.gf('django.db.models.fields.IntegerField')()),
             ('lenda', self.gf('django.db.models.fields.IntegerField')()),
             ('code', self.gf('django.db.models.fields.IntegerField')()),
-            ('best', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('game', ['ScoreReport'])
+
+        # Adding model 'ScoreReportBest'
+        db.create_table('game_scorereportbest', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('report', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.ScoreReport'])),
+        ))
+        db.send_create_signal('game', ['ScoreReportBest'])
 
 
     def backwards(self, orm):
@@ -85,6 +91,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ScoreReport'
         db.delete_table('game_scorereport')
+
+        # Deleting model 'ScoreReportBest'
+        db.delete_table('game_scorereportbest')
 
 
     models = {
@@ -161,7 +170,6 @@ class Migration(SchemaMigration):
         },
         'game.scorereport': {
             'Meta': {'object_name': 'ScoreReport'},
-            'best': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'code': ('django.db.models.fields.IntegerField', [], {}),
             'diff': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -174,6 +182,11 @@ class Migration(SchemaMigration):
             'score': ('django.db.models.fields.IntegerField', [], {}),
             'success': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'ura': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+        },
+        'game.scorereportbest': {
+            'Meta': {'object_name': 'ScoreReportBest'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'report': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.ScoreReport']"})
         }
     }
 

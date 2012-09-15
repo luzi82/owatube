@@ -101,30 +101,15 @@ def add_game_comment(request):
                 elif isinstance(c,game.PlayResult):
                     content = c.original
                     
-                db_gcc = game.models.GameCommentContent(
+                db_gcc = game.models.GameCommentContent.objects.create(
                      parent = db_gc,
                      part = ci,
                      content = content,
                      is_score = isinstance(c,game.PlayResult),
                 )
-                db_gcc.save()
                 
                 if isinstance(c,game.PlayResult):
-                    best = False
-                    try:
-                        lastbest_data=game.models.ScoreReport.objects.get(
-                            best = True,
-                            diff = c.diff,
-                            parent__parent__game = game_data,
-                        )
-                        if lastbest_data.score < c.score:
-                            lastbest_data.best = False
-                            lastbest_data.save()
-                            best = True
-                    except game.models.ScoreReport.DoesNotExist:
-                        best = True
-                    
-                    scorereport_data=game.models.ScoreReport(
+                    db_scorereport=game.models.ScoreReport.objects.create(
                         parent = db_gcc,
                         diff = c.diff,
                         ura = c.ura,
@@ -136,9 +121,23 @@ def add_game_comment(request):
                         maxcombo = c.maxcombo,
                         lenda = c.lenda,
                         code = c.code,
-                        best = best
                     )
-                    scorereport_data.save()
+
+                    try:
+                        db_scorereportbest=game.models.ScoreReportBest.objects.get(
+                            report__parent__parent__game = game_data,
+                            report__diff = c.diff,
+                        )
+                        db_scorereportbest_report=db_scorereportbest.report
+                        if db_scorereportbest_report.score < c.score:
+                            db_scorereportbest.report = db_scorereport
+                            db_scorereportbest.save()
+
+                    except game.models.ScoreReportBest.DoesNotExist:
+                        db_scorereportbest=game.models.ScoreReportBest.objects.create(
+                            report=db_scorereport
+                        )
+                    
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))
     return HttpResponseRedirect(reverse("game.views.index"))
 
