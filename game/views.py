@@ -110,17 +110,33 @@ def add_game_comment(request):
                 db_gcc.save()
                 
                 if isinstance(c,game.PlayResult):
+                    best = False
+                    try:
+                        lastbest_data=game.models.ScoreReport.objects.get(
+                            best = True,
+                            diff = c.diff,
+                            parent__parent__game = game_data,
+                        )
+                        if lastbest_data.score < c.score:
+                            lastbest_data.best = False
+                            lastbest_data.save()
+                            best = True
+                    except game.models.ScoreReport.DoesNotExist:
+                        best = True
+                    
                     scorereport_data=game.models.ScoreReport(
                         parent = db_gcc,
                         diff = c.diff,
                         ura = c.ura,
                         success = c.success,
+                        score = c.score,
                         r0 = c.r0,
                         r1 = c.r1,
                         r2 = c.r2,
                         maxcombo = c.maxcombo,
                         lenda = c.lenda,
                         code = c.code,
+                        best = best
                     )
                     scorereport_data.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))

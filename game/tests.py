@@ -347,6 +347,7 @@ Hello B
         self.assertEqual(db_scorereport.diff,3)
         self.assertEqual(db_scorereport.ura,False)
         self.assertEqual(db_scorereport.success,True)
+        self.assertEqual(db_scorereport.score,1026720)
         self.assertEqual(db_scorereport.r0,573)
         self.assertEqual(db_scorereport.r1,0)
         self.assertEqual(db_scorereport.r2,0)

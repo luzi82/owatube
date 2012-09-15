@@ -6,6 +6,7 @@ class PlayResult:
     # diff: int
     # ura: bool
     # success: bool
+    # score: int
     # r0,r1,r2: int
     # maxcombo: int
     # lenda: int

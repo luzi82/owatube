@@ -34,9 +34,12 @@ class ScoreReport(models.Model):
     diff = models.IntegerField()
     ura = models.BooleanField()
     success = models.BooleanField()
+    score = models.IntegerField()
     r0 = models.IntegerField()
     r1 = models.IntegerField()
     r2 = models.IntegerField()
     maxcombo = models.IntegerField()
     lenda = models.IntegerField()
     code = models.IntegerField()
+    
+    best = models.BooleanField()
