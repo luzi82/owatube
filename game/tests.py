@@ -334,6 +334,7 @@ Hello B
         
         db_gamecomment=game.models.GameComment.objects.get(pk=1)
         self.assertEqual(db_gamecomment.player.username,"submitter")
+        self.assertEqual(db_gamecomment.content,comment.decode("utf-8"))
 
         db_gamecommentcontent=game.models.GameCommentContent.objects.get(pk=1)
         self.assertEqual(db_gamecommentcontent.parent.pk,1)

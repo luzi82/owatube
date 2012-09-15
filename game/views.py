@@ -84,16 +84,17 @@ def add_game_comment(request):
             game_data = game.models.Game.objects.get(pk=game_entry)
             comment = comment_form.cleaned_data["comment"]
             comment = comment.encode("utf-8")
-            comment = game.swf.parse(game_data.swf, comment)
+            comment_p = game.swf.parse(game_data.swf, comment)
             
             db_gc = game.models.GameComment(
                 game = game_data,
                 player = request.user,
+                content = comment,
             )
             db_gc.save()
             
-            for ci in xrange(len(comment)):
-                c = comment[ci]
+            for ci in xrange(len(comment_p)):
+                c = comment_p[ci]
                 
                 if isinstance(c,str):
                     content = c

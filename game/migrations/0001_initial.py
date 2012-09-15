@@ -37,6 +37,7 @@ class Migration(SchemaMigration):
             ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
             ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('content', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('game', ['GameComment'])
 
@@ -45,7 +46,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.GameComment'])),
             ('part', self.gf('django.db.models.fields.IntegerField')()),
-            ('content', self.gf('django.db.models.fields.TextField')(max_length=1000)),
+            ('content', self.gf('django.db.models.fields.TextField')()),
             ('is_score', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('game', ['GameCommentContent'])
@@ -135,6 +136,7 @@ class Migration(SchemaMigration):
         },
         'game.gamecomment': {
             'Meta': {'object_name': 'GameComment'},
+            'content': ('django.db.models.fields.TextField', [], {}),
             'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -142,7 +144,7 @@ class Migration(SchemaMigration):
         },
         'game.gamecommentcontent': {
             'Meta': {'object_name': 'GameCommentContent'},
-            'content': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
+            'content': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_score': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.GameComment']"}),
