@@ -121,6 +121,7 @@ def add_game_comment(request):
                         maxcombo = c.maxcombo,
                         lenda = c.lenda,
                         code = c.code,
+                        prove = c.prove,
                     )
 
                     try:

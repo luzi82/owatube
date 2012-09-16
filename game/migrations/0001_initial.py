@@ -65,6 +65,7 @@ class Migration(SchemaMigration):
             ('maxcombo', self.gf('django.db.models.fields.IntegerField')()),
             ('lenda', self.gf('django.db.models.fields.IntegerField')()),
             ('code', self.gf('django.db.models.fields.IntegerField')()),
+            ('prove', self.gf('django.db.models.fields.CharField')(max_length=64)),
         ))
         db.send_create_signal('game', ['ScoreReport'])
 
@@ -176,6 +177,7 @@ class Migration(SchemaMigration):
             'lenda': ('django.db.models.fields.IntegerField', [], {}),
             'maxcombo': ('django.db.models.fields.IntegerField', [], {}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.GameCommentContent']"}),
+            'prove': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'r0': ('django.db.models.fields.IntegerField', [], {}),
             'r1': ('django.db.models.fields.IntegerField', [], {}),
             'r2': ('django.db.models.fields.IntegerField', [], {}),

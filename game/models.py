@@ -41,6 +41,7 @@ class ScoreReport(models.Model):
     maxcombo = models.IntegerField()
     lenda = models.IntegerField()
     code = models.IntegerField()
+    prove = models.CharField(max_length=64)
     
 class ScoreReportBest(models.Model):
     report = models.ForeignKey(ScoreReport)

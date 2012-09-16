@@ -12,8 +12,9 @@ class PlayResult:
     # lenda: int
     # option: int # change later
     # code: int
+    # prove: str
     # original: str
-    def __init__(self,diff,ura,success,score,r0,r1,r2,maxcombo,lenda,option,code,original):
+    def __init__(self,diff,ura,success,score,r0,r1,r2,maxcombo,lenda,option,code,prove,original):
         frame = inspect.currentframe()
         args, _, _, values = inspect.getargvalues(frame)
         for arg in args:

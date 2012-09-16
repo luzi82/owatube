@@ -95,6 +95,7 @@ class SimpleTest(TestCase):
             maxcombo=573,lenda=118,
             option=0,
             code=16906247,
+            prove="#!#16906247!#1026720!#31345!#15589489!#23726650!#",
             original=text
         )
         result=game.swf.parse("f90626fa",text)
@@ -354,3 +355,4 @@ Hello B
         self.assertEqual(db_scorereport.maxcombo,573)
         self.assertEqual(db_scorereport.lenda,118)
         self.assertEqual(db_scorereport.code,16906247)
+        self.assertEqual(db_scorereport.prove,"#!#16906247!#1026720!#31345!#15589489!#23726650!#")

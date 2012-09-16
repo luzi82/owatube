@@ -70,6 +70,7 @@ def parse_report_0(txt):
             lenda=int(m0.group("lenda")),
             option=0,
             code=int(m0.group("code")),
+            prove=m0.group("prove"),
             original=m0.group()
         ))
         buf=buf[m0.end():]
