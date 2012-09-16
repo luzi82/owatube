@@ -10,6 +10,7 @@ from django.conf import settings
 import game.swf
 import magic
 import pprint
+import game.models as models
 
 ## helper function
 
@@ -58,7 +59,22 @@ def get_game_list(request, user):
 @_check_game_entry
 def get_game(request, game):
     comment_form = AddGameCommentForm(initial={"game_entry":game.id})
-    return render(request,"game/get_game.tmpl",{"game":game,"comment_form":comment_form})
+    
+    comment_list=[]
+    
+    db_gamecomment_list = models.GameComment.objects.filter(game=game).order_by("-id")
+    for db_gamecomment in db_gamecomment_list:
+        comment=[]
+        db_gamecommentcontent_list = models.GameCommentContent.objects.filter(parent=db_gamecomment).order_by("id")
+        for db_gamecommentcontent in db_gamecommentcontent_list:
+            comment.append(db_gamecommentcontent.content)
+        comment_list.append(comment)
+    
+    return render(request,"game/get_game.tmpl",{
+        "game":game,
+        "comment_form":comment_form,
+        "comment_list":comment_list
+    })
 
 @_check_game_entry
 def get_game_data(request, game):

@@ -1,6 +1,7 @@
 {% extends "base.tmpl" %}
 
 {% load url from future %}
+{% load comment %}
 
 {% block title %}{{ user.username }} - Game list{% endblock %}
 
@@ -12,4 +13,9 @@
 {{ comment_form.as_p }}
 <input type="submit" value="Submit" />
 </form>
+<div>{% for comment in comment_list %}
+	<div>{% for commentcontent in comment %}
+		<p>{{ commentcontent|comment }}</p>
+	{% endfor %}</div>
+{% endfor %}</div>
 {% endblock %}
