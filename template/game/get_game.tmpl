@@ -13,9 +13,13 @@
 {{ comment_form.as_p }}
 <input type="submit" value="Submit" />
 </form>
-<div>{% for comment in comment_list %}
-	<div>{% for commentcontent in comment %}
-		<p>{{ commentcontent|comment }}</p>
-	{% endfor %}</div>
-{% endfor %}</div>
+<table border="1">{% for comment in comment_list %}
+	<tr>
+		<td>{{ comment.author }}</td>
+		<td>{% for commentcontent in comment.comment %}
+			<p>{{ commentcontent|comment }}</p>
+		{% endfor %}</td>
+		<td>{{ comment.datetime }}</td>
+	</tr>
+{% endfor %}</table>
 {% endblock %}

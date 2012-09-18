@@ -68,7 +68,11 @@ def get_game(request, game):
         db_gamecommentcontent_list = models.GameCommentContent.objects.filter(parent=db_gamecomment).order_by("id")
         for db_gamecommentcontent in db_gamecommentcontent_list:
             comment.append(db_gamecommentcontent.content)
-        comment_list.append(comment)
+        comment_list.append({
+            "author":db_gamecomment.player.username,
+            "comment":comment,
+            "datetime":db_gamecomment.create_date
+        })
     
     return render(request,"game/get_game.tmpl",{
         "game":game,
