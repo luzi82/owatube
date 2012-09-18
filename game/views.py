@@ -143,7 +143,9 @@ def add_game_comment(request):
                     try:
                         db_scorereportbest=game.models.ScoreReportBest.objects.get(
                             report__parent__parent__game = game_data,
+                            report__parent__parent__player = request.user,
                             report__diff = c.diff,
+                            report__ura = c.ura,
                         )
                         db_scorereportbest_report=db_scorereportbest.report
                         if db_scorereportbest_report.score < c.score:
