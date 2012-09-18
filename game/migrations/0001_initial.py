@@ -26,7 +26,7 @@ class Migration(SchemaMigration):
         db.create_table('game_gamediff', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
-            ('diff', self.gf('django.db.models.fields.IntegerField')()),
+            ('diff', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
             ('star', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('game', ['GameDiff'])
@@ -35,7 +35,7 @@ class Migration(SchemaMigration):
         db.create_table('game_gamecomment', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
-            ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, db_index=True, blank=True)),
             ('player', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('content', self.gf('django.db.models.fields.TextField')()),
         ))
@@ -55,10 +55,10 @@ class Migration(SchemaMigration):
         db.create_table('game_scorereport', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('parent', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.GameCommentContent'])),
-            ('diff', self.gf('django.db.models.fields.IntegerField')()),
-            ('ura', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('diff', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
+            ('ura', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True)),
             ('success', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('score', self.gf('django.db.models.fields.IntegerField')()),
+            ('score', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
             ('r0', self.gf('django.db.models.fields.IntegerField')()),
             ('r1', self.gf('django.db.models.fields.IntegerField')()),
             ('r2', self.gf('django.db.models.fields.IntegerField')()),
@@ -149,7 +149,7 @@ class Migration(SchemaMigration):
         'game.gamecomment': {
             'Meta': {'object_name': 'GameComment'},
             'content': ('django.db.models.fields.TextField', [], {}),
-            'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'db_index': 'True', 'blank': 'True'}),
             'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'player': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
@@ -164,7 +164,7 @@ class Migration(SchemaMigration):
         },
         'game.gamediff': {
             'Meta': {'object_name': 'GameDiff'},
-            'diff': ('django.db.models.fields.IntegerField', [], {}),
+            'diff': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'star': ('django.db.models.fields.IntegerField', [], {})
@@ -172,7 +172,7 @@ class Migration(SchemaMigration):
         'game.scorereport': {
             'Meta': {'object_name': 'ScoreReport'},
             'code': ('django.db.models.fields.IntegerField', [], {}),
-            'diff': ('django.db.models.fields.IntegerField', [], {}),
+            'diff': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lenda': ('django.db.models.fields.IntegerField', [], {}),
             'maxcombo': ('django.db.models.fields.IntegerField', [], {}),
@@ -181,9 +181,9 @@ class Migration(SchemaMigration):
             'r0': ('django.db.models.fields.IntegerField', [], {}),
             'r1': ('django.db.models.fields.IntegerField', [], {}),
             'r2': ('django.db.models.fields.IntegerField', [], {}),
-            'score': ('django.db.models.fields.IntegerField', [], {}),
+            'score': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'success': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'ura': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'ura': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'})
         },
         'game.scorereportbest': {
             'Meta': {'object_name': 'ScoreReportBest'},
