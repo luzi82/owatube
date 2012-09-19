@@ -182,39 +182,25 @@ def _get_code(buf,diff):
                 seqcount=seqcount+1
                 hum = seq[seqcount]
                 if hum == "(":
-                {
                     seqcount=seqcount+1
                     hum = seq[seqcount]
-                } // end if
-                if (hum == ")" || hum == "," || seqcount >= len(seq))
-                {
+                if hum == ")" or hum == "," or seqcount >= len(seq):
                     break
-                } // end if
                 new1 = new1 + hum
-            } // end while
-            var i = 0
-            while (i++, i < new1.length)
-            {
+            i = 0
+            while i+1 < len(new1):
                 moji = new1[i]
                 kyoka = "0.123456789"
-                if (kyoka.indexOf(moji, 0) == -1)
-                {
+                if kyoka.find(moji, 0) == -1:
                     hoge = 1
-                } // end if
-            } // end while
-            if (hoge)
-            {
-                this._root.data[new1] = _root.kaigyou(content[new1])
-                hcodec[10] = hcodec[10] + Number(content[new1]) * 1000
-            }
-            else
-            {
-                hcodec[10] = hcodec[10] + Number(new1) * 1000
-            } // end else if
+            if hoge:
+#                this._root.data[new1] = _root.kaigyou(content[new1])
+                hcodec[10] = hcodec[10] + int(content[new1]) * 1000
+            else:
+                hcodec[10] = hcodec[10] + int(new1) * 1000
             new1 = ""
             hoge = 0
-        } // end if
-        if (hum == "a")
+        if hum == "a":
         {
             while (true)
             {
