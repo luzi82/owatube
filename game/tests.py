@@ -8,6 +8,8 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 import re
+import game.swf.code0
+import game.swf.code1
 import game.swf
 from django.contrib.auth.models import User
 from django.test.client import Client
@@ -356,3 +358,123 @@ Hello B
         self.assertEqual(db_scorereport.lenda,118)
         self.assertEqual(db_scorereport.code,16906247)
         self.assertEqual(db_scorereport.prove,"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
+
+    def test_code0_2(self):
+        data_buf = open("game/test_res/data2.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99860)
+
+    def test_code0_3(self):
+        data_buf = open("game/test_res/data3.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99860)
+
+    def test_code0_4(self):
+        data_buf = open("game/test_res/data4.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99865)
+
+    def test_code0_5(self):
+        data_buf = open("game/test_res/data5.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99865)
+
+    def test_code0_6(self):
+        data_buf = open("game/test_res/data6.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99845)
+
+    def test_code0_7(self):
+        data_buf = open("game/test_res/data7.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99855)
+
+    def test_code0_8(self):
+        data_buf = open("game/test_res/data8.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,99970)
+
+    def test_code0_9(self):
+        data_buf = open("game/test_res/data9.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,109860)
+
+    def test_code0_10(self):
+        data_buf = open("game/test_res/data10.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,1682731)
+
+    def test_code0_11(self):
+        data_buf = open("game/test_res/data11.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,307277)
+
+    def test_code0_12(self):
+        data_buf = open("game/test_res/data12.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,1230694)
+
+    def test_code0_13(self):
+        data_buf = open("game/test_res/data13.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,1579877)
+
+    def test_code0_14(self):
+        data_buf = open("game/test_res/data14.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,85745)
+
+    def test_code0_15(self):
+        data_buf = open("game/test_res/data15.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,1687685)
+
+    def test_code0_16(self):
+        data_buf = open("game/test_res/data16.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2450)
+
+    def test_code0_17(self):
+        data_buf = open("game/test_res/data17.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,186920)
+
+    def test_code0_18(self):
+        data_buf = open("game/test_res/data18.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2065)
+
+    def test_code0_19(self):
+        data_buf = open("game/test_res/data19.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2025)
+        
+    def test_code0_20(self):
+        data_buf = open("game/test_res/data20.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2170)
+
+    def test_code0_21(self):
+        data_buf = open("game/test_res/data21.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2300)
+
+    def test_code0_22(self):
+        data_buf = open("game/test_res/data22.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2155)
+
+    def test_code0_23(self):
+        data_buf = open("game/test_res/data23.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        self.assertEqual(ret,2415)
+
+    def test_code0_x(self):
+        data_buf = open("game/test_res/data.txt","r").read()
+        ret = game.swf.code0._get_code(data_buf, 3)
+        print ret
+
+    def test_code1(self):
+        data_buf = open("game/test_res/data.txt","r").read()
+        ret = game.swf.code1._get_code(data_buf, 3)
+        self.assertEqual(ret,16906677)
