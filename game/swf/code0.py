@@ -124,10 +124,10 @@ def _get_code(buf,diff):
         if seqcount == -1:
             break
         if hum == "1" or hum == "2" or hum == "3" or hum == "4":
-            hcodec[int(hum)]=hcodec[int(hum)]+1
+            hcodec[int(hum)]+=1
             hcodec[9] = hcodec[9] + seqcount
         if hum == "5" or hum == "6" or hum == "7" or hum == "8":
-            hcodec[int(hum)]=hcodec[int(hum)]+1
+            hcodec[int(hum)]+=1
         if hum == ",":
             hcodec[0]=hcodec[0]+1
         
@@ -300,97 +300,58 @@ def _get_code(buf,diff):
                 kyoka = "0.123456789"
                 if kyoka.find(moji, 0) == -1:
                     hoge = 1
-            if (hoge)
-            {
-                this._root.data[new1] = _root.kaigyou(content[new1])
-                hcodec[10] = hcodec[10] + Number(content[new1]) * 1000
-            }
-            else
-            {
-                hcodec[10] = hcodec[10] + Number(new1) * 1000
-            } // end else if
+            if hoge:
+#                this._root.data[new1] = _root.kaigyou(content[new1])
+                hcodec[10] = hcodec[10] + int(content[new1]) * 1000
+            else:
+                hcodec[10] = hcodec[10] + int(new1) * 1000
             new1 = ""
             hoge = 0
-        } // end if
-        if (hum == "a")
-        {
+        if hum == "a":
             while True:
-            {
                 seqcount+=1
                 hum = seq[seqcount]
-                if (hum == "(")
-                {
+                if hum == "(":
                     seqcount+=1
                     hum = seq[seqcount]
-                } // end if
-                if (hum == ")" or hum == "," or seqcount >= len(seq))
-                {
+                if hum == ")" or hum == "," or seqcount >= len(seq):
                     break
-                } // end if
                 new1 = new1 + hum
-            } // end while
-            var i = 0
-            while (i++, i < new1.length)
-            {
+            i = 0
+            while i+1 < len(new1):
+                i+=1
                 moji = new1[i]
                 kyoka = "0.123456789"
-                if (kyoka.indexOf(moji, 0) == -1)
-                {
+                if kyoka.find(moji, 0) == -1:
                     hoge = 1
-                } // end if
-            } // end while
-            if (hoge)
-            {
-                this._root.data[new1] = _root.kaigyou(content[new1])
-                hcodec[10] = hcodec[10] + Number(content[new1])
-            }
-            else
-            {
-                hcodec[10] = hcodec[10] + Number(new1)
-            } // end else if
+            if hoge:
+#                this._root.data[new1] = _root.kaigyou(content[new1])
+                hcodec[10] = hcodec[10] + int(content[new1])
+            else:
+                hcodec[10] = hcodec[10] + int(new1)
             new1 = ""
             hoge = 0
-        } // end if
-        if (hum == "g")
-        {
-            if (seq.charAt(seqcount + 1) == "g")
-            {
+        if hum == "g":
+            if seq[seqcount + 1] == "g":
                 sc_gogo = 1
                 seqcount+=1
-            }
-            else
-            {
+            else:
                 sc_gogo = 0
-            } // end if
-        } // end else if
-        if (hum == "k" or hum == "t" or hum == "e")
-        {
+        if hum == "k" or hum == "t" or hum == "e":
             break
-        } // end if
-        if (seqcount == -1)
-        {
+        if seqcount == -1:
             break
-        } // end if
-        if (hum == "1" or hum == "2" or hum == "3" or hum == "4")
-        {
+        if hum == "1" or hum == "2" or hum == "3" or hum == "4":
             hcodec[hum]+=1
             hcodec[9] = hcodec[9] + seqcount
-            _root.tn+=1
-        } // end if
-        if (hum == "5" or hum == "6" or hum == "7" or hum == "8")
-        {
+#            _root.tn+=1
+        if hum == "5" or hum == "6" or hum == "7" or hum == "8":
             hcodec[hum]+=1
-        } // end if
-        if (hum == ",")
-        {
+        if hum == ",":
             hcodec[0]+=1
-        } // end if
-        if (hum == "1" or hum == "2")
-        {
-            if (sc_gogo == 0)
-            {
-                if (sc_combo <= 100)
-                {
+        if hum == "1" or hum == "2":
+            if sc_gogo == 0:
+                if sc_combo <= 100:
                     sc_score = int((sc_score + (data.score[_root.level - 1][0] + int(sc_combo / 10) * data.score[_root.level - 1][1])) / 10) * 10
                 }
                 else
