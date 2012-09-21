@@ -16,9 +16,7 @@
 <table border="1">{% for comment in comment_list %}
 	<tr>
 		<td>{{ comment.author }}</td>
-		<td>{% for commentcontent in comment.comment %}
-			<p>{{ commentcontent|comment }}</p>
-		{% endfor %}</td>
+		<td>{{ comment.content }}</td>
 		<td>{{ comment.datetime }}</td>
 	</tr>
 {% endfor %}</table>

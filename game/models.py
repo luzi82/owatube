@@ -23,14 +23,10 @@ class GameComment(models.Model):
     player = models.ForeignKey(auth_models.User,db_index=True)
     content = models.TextField()
 
-class GameCommentContent(models.Model):
-    parent = models.ForeignKey(GameComment,db_index=True)
-    part = models.IntegerField()
-    content = models.TextField()
-    is_score = models.BooleanField()
-    
 class ScoreReport(models.Model):
-    parent = models.ForeignKey(GameCommentContent,db_index=True)
+    game = models.ForeignKey(Game,db_index=True)
+    create_date = models.DateTimeField(auto_now=True,db_index=True)
+    player = models.ForeignKey(auth_models.User,db_index=True)
     diff = models.IntegerField(db_index=True)
     ura = models.BooleanField(db_index=True)
     success = models.BooleanField()
@@ -40,8 +36,6 @@ class ScoreReport(models.Model):
     r2 = models.IntegerField()
     maxcombo = models.IntegerField()
     lenda = models.IntegerField()
-    code = models.IntegerField()
-    prove = models.CharField(max_length=64)
     
 class ScoreReportBest(models.Model):
     report = models.ForeignKey(ScoreReport,db_index=True)

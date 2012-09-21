@@ -64,13 +64,9 @@ def get_game(request, game):
     
     db_gamecomment_list = models.GameComment.objects.filter(game=game).order_by("-id")
     for db_gamecomment in db_gamecomment_list:
-        comment=[]
-        db_gamecommentcontent_list = models.GameCommentContent.objects.filter(parent=db_gamecomment).order_by("id")
-        for db_gamecommentcontent in db_gamecommentcontent_list:
-            comment.append(db_gamecommentcontent.content)
         comment_list.append({
             "author":db_gamecomment.player.username,
-            "comment":comment,
+            "content":db_gamecomment.content,
             "datetime":db_gamecomment.create_date
         })
     
@@ -104,62 +100,13 @@ def add_game_comment(request):
             game_data = game.models.Game.objects.get(pk=game_entry)
             comment = comment_form.cleaned_data["comment"]
             comment = comment.encode("utf-8")
-            comment_p = game.swf.parse(game_data.swf, comment)
+            comment = comment.strip()
             
-            db_gc = game.models.GameComment(
+            game.models.GameComment.objects.create(
                 game = game_data,
                 player = request.user,
                 content = comment,
             )
-            db_gc.save()
-            
-            for ci in xrange(len(comment_p)):
-                c = comment_p[ci]
-                
-                if isinstance(c,str):
-                    content = c
-                elif isinstance(c,game.PlayResult):
-                    content = c.original
-                    
-                db_gcc = game.models.GameCommentContent.objects.create(
-                     parent = db_gc,
-                     part = ci,
-                     content = content,
-                     is_score = isinstance(c,game.PlayResult),
-                )
-                
-                if isinstance(c,game.PlayResult):
-                    db_scorereport=game.models.ScoreReport.objects.create(
-                        parent = db_gcc,
-                        diff = c.diff,
-                        ura = c.ura,
-                        success = c.success,
-                        score = c.score,
-                        r0 = c.r0,
-                        r1 = c.r1,
-                        r2 = c.r2,
-                        maxcombo = c.maxcombo,
-                        lenda = c.lenda,
-                        code = c.code,
-                        prove = c.prove,
-                    )
-
-                    try:
-                        db_scorereportbest=game.models.ScoreReportBest.objects.get(
-                            report__parent__parent__game = game_data,
-                            report__parent__parent__player = request.user,
-                            report__diff = c.diff,
-                            report__ura = c.ura,
-                        )
-                        db_scorereportbest_report=db_scorereportbest.report
-                        if db_scorereportbest_report.score < c.score:
-                            db_scorereportbest.report = db_scorereport
-                            db_scorereportbest.save()
-
-                    except game.models.ScoreReportBest.DoesNotExist:
-                        db_scorereportbest=game.models.ScoreReportBest.objects.create(
-                            report=db_scorereport
-                        )
                     
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":game_entry}))
     return HttpResponseRedirect(reverse("game.views.index"))
@@ -181,7 +128,7 @@ def add_game(request):
             data_f=form.cleaned_data["data"];data_f.open()
             data_buf = data_f.read()
             data_data = game.swf.parse_data(swf_key, data_buf)
-            db_game = game.models.Game(
+            db_game = game.models.Game.objects.create(
                 author=request.user,
                 title=data_data["title"],
                 music_by=data_data["music_by"],
@@ -190,16 +137,14 @@ def add_game(request):
                 bgm=request.FILES['bgm'],
                 swf=swf_key
             )
-            db_game.save()
             for i in range(len(data_data["diff"])):
                 star = data_data["diff"][i]
                 if star==0:continue
-                db_gamediff = game.models.GameDiff(
+                game.models.GameDiff.objects.create(
                     game = db_game,
                     diff = i,
                     star = star,
                 )
-                db_gamediff.save()
             return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
     else:
         form = AddGameForm()

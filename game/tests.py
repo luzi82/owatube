@@ -26,200 +26,6 @@ class SimpleTest(TestCase):
         self.assertEqual(C(1,b=2),7)
         self.assertEqual(C(1,2),7)
 
-    def test_reg(self):
-        text="*太鼓のオワタツジン結果*Ver3.03"
-        reg="\*太鼓のオワタツジン結果\*Ver3\.03"
-        self.assertTrue(re.match(reg,text))
-
-        text="""*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く"""
-        reg="""\*太鼓のオワタツジン結果\*Ver3\.03
-曲名:([^\\n]*)"""
-        m=re.search(reg,text)
-        self.assertEqual(m.group(1),"凛として咲く花の如く")
-        
-        text="""*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-        m=game.swf.parse_report_0_re0.search(text)
-        self.assertIsNotNone(m)
-        self.assertEqual(m.group("success"),"成功")
-        self.assertEqual(m.group("score"),"1026720")
-        self.assertEqual(m.group("r0"),"573")
-        self.assertEqual(m.group("r1"),"0")
-        self.assertEqual(m.group("r2"),"0")
-        self.assertEqual(m.group("maxcombo"),"573")
-        self.assertEqual(m.group("lenda"),"118")
-        self.assertEqual(m.group("option"),"なし")
-        self.assertEqual(m.group("code"),"16906247")
-        self.assertEqual(m.group("prove"),"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
-        
-        m2=game.swf.parse_report_0_re1.search(m.group("prove"))
-        self.assertEqual(m2.group("code"),"16906247")
-        self.assertEqual(m2.group("score"),"1026720")
-
-    def test_comment_parse(self):
-        text="""*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-        play_result=game.PlayResult(
-            diff=3,ura=False,
-            success=True,
-            score=1026720,
-            r0=573,r1=0,r2=0,
-            maxcombo=573,lenda=118,
-            option=0,
-            code=16906247,
-            prove="#!#16906247!#1026720!#31345!#15589489!#23726650!#",
-            original=text
-        )
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,[play_result])
-
-        text="""Hello World
-*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello World",play_result])
-
-        text="""*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#
-Hello World"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,[play_result,"Hello World"])
-
-        text="""Hello A
-*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#
-Hello B"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello A",play_result,"Hello B"])
-
-        text="""Hello A
-
-*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#
-
-Hello B"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello A",play_result,"Hello B"])
-
-        text="""
-
-
-Hello A
-
-
-
-*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#
-
-
-
-Hello B
-
-
-"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello A",play_result,"Hello B"])
-
-        text="""Hello A\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nHello B"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello A\n\nHello B"])
-
-        text="""Hello A\nHello B"""
-        result=game.swf.parse("f90626fa",text)
-        self.assertEqual(result,["Hello A\nHello B"])
-
     def test_add_game(self):
         User.objects.create_user("submitter",password="asdf")
 
@@ -296,6 +102,7 @@ Hello B
         self.assertEqual(ret["data_by"], "No.31")
         self.assertEqual(ret["diff"], [0,0,0,7])
 
+
     def test_add_game_comment(self):
         User.objects.create_user("submitter",password="asdf")
         
@@ -310,23 +117,7 @@ Hello B
             "swf":"f90626fa",
         })
 
-        comment="""*太鼓のオワタツジン結果*Ver3.03
-曲名:凛として咲く花の如く
-曲:
-譜面:No.31
-コース:おわたコース(★7)
-ノルマクリア成功
-得点:1026720点
-判定:良 573/可 0/不可 0
-最大コンボ数:573回
-叩けた率:100%
-連打:118回
-オプション:なし
-譜面コード:16906247
-証明コード:
-#!#16906247!#1026720!#31345!#15589489!#23726650!#"""
-#        pprint.pprint(comment)
-#        comment=comment.encode("utf-8")
+        comment="Comment 1"
         client.post("/game/comment/", {
             "game_entry":"1",
             "comment":comment,
@@ -335,23 +126,3 @@ Hello B
         db_gamecomment=game.models.GameComment.objects.get(pk=1)
         self.assertEqual(db_gamecomment.player.username,"submitter")
         self.assertEqual(db_gamecomment.content,comment.decode("utf-8"))
-
-        db_gamecommentcontent=game.models.GameCommentContent.objects.get(pk=1)
-        self.assertEqual(db_gamecommentcontent.parent.pk,1)
-        self.assertEqual(db_gamecommentcontent.part,0)
-        self.assertEqual(db_gamecommentcontent.content,comment.decode("utf-8"))
-        self.assertEqual(db_gamecommentcontent.is_score,True)
-        
-        db_scorereport=game.models.ScoreReport.objects.get(pk=1)
-        self.assertEqual(db_scorereport.parent.pk,1)
-        self.assertEqual(db_scorereport.diff,3)
-        self.assertEqual(db_scorereport.ura,False)
-        self.assertEqual(db_scorereport.success,True)
-        self.assertEqual(db_scorereport.score,1026720)
-        self.assertEqual(db_scorereport.r0,573)
-        self.assertEqual(db_scorereport.r1,0)
-        self.assertEqual(db_scorereport.r2,0)
-        self.assertEqual(db_scorereport.maxcombo,573)
-        self.assertEqual(db_scorereport.lenda,118)
-        self.assertEqual(db_scorereport.code,16906247)
-        self.assertEqual(db_scorereport.prove,"#!#16906247!#1026720!#31345!#15589489!#23726650!#")
