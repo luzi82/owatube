@@ -53,7 +53,10 @@ def get_game_score_list(request, user):
 
 @_check_u
 def get_game_list(request, user):
-    game_list = game.models.Game.objects.filter(author__exact=user)
+    game_list = game.models.Game.objects.filter(author__exact=user).extra(select={
+        "comment_count" : 'SELECT COUNT(*) FROM game_gamecomment WHERE game_gamecomment.game_id = game_game.id',
+        "report_count"  : 'SELECT COUNT(*) FROM game_scorereport WHERE game_scorereport.game_id = game_game.id'
+    },)
     return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
 
 @_check_game_entry

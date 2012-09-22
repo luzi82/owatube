@@ -5,9 +5,26 @@
 {% block title %}{{ user.username }} - Game list{% endblock %}
 
 {% block main %}
-<ul>
+<h1>My owata</h1>
+
+<div class="row">
+<table class="span12" border="1">
+	<tr>
+		<th>Title</th>
+		<th>Score report</th>
+		<th>Comment</th>
+		<th>Upload date</th>
+		<th></th>
+	</tr>
 	{% for game in game_list %}
-		<li><a href="{% url 'game.views.get_game' game_entry=game.id %}">{{ game.title }}</a></li>
+		<tr>
+			<td><a href="{% url 'game.views.get_game' game_entry=game.id %}">{{ game.title }}</a></td>
+			<td>{{ game.report_count }}</td>
+			<td>{{ game.comment_count }}</td>
+			<td>{{ game.create_date }}</td>
+			<td><a href="{% url 'game.views.edit_game' game_entry=game.id %}">Edit</a></td>
+		</tr>
 	{% endfor %}
-</ul>
+</table>
+</div>
 {% endblock %}
