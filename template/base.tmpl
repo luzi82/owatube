@@ -4,20 +4,33 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Owataikoto2 - {% block title %}{% endblock %}</title>
+<link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<ul>
-<li><a href="/">Index</a></li>
-{% if user.is_authenticated %}
-<li><a href="{% url 'game.views.add_game' %}">Upload</a></li>
-<li><a href="{% url 'game.views.get_game_list' %}?u={{ user.username|urlencode }}">My owata</a></li>
-<li><a href="{% url 'game.views.get_user_profile' %}?u={{ user.username|urlencode }}">{{ user.username }}</a></li>
-<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
-{% else %}
-<li><a href="{% url 'django.contrib.auth.views.login' %}">Login</a></li>
-{% endif %}
-</ul>
-<hr/>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+  	<div class="container">
+		<a class="brand" href="/">Owatube</a>
+	    <ul class="nav pull-right">
+			{% if user.is_authenticated %}
+			<li><a href="{% url 'game.views.add_game' %}">Upload</a></li>
+			<li><a href="{% url 'game.views.get_game_list' %}?u={{ user.username|urlencode }}">My owata</a></li>
+			<li><a href="{% url 'game.views.get_user_profile' %}?u={{ user.username|urlencode }}">{{ user.username }}</a></li>
+			<li><a href="{% url 'django.contrib.auth.views.logout' %}">Logout</a></li>
+			{% else %}
+			<li><a href="{% url 'django.contrib.auth.views.login' %}">Login</a></li>
+			{% endif %}
+	    </ul>
+	</div>
+  </div>
+</div>
+
+<div class="container" style="padding-top: 60px">
 {% block main %}{% endblock %}
+</div>
+
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+
 </body>
 </html>
