@@ -5,8 +5,12 @@
 {% block title %}Member register{% endblock %}
 
 {% block main %}
+
+<h1>Add game</h1>
+
 <form action="{% url 'game.views.add_game' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>
+
 {% endblock %}
