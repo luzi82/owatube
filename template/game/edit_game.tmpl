@@ -1,0 +1,27 @@
+{% extends "base.tmpl" %}
+
+{% load url from future %}
+
+{% block title %}Edit game{% endblock %}
+
+{% block main %}
+
+<h1>Edit game</h1>
+
+{% if owata_ready %}
+	<div align="center">
+		<embed
+			width="576px" height="432px"
+			src="{% url 'game.views.get_game_swf' game_entry=game.id %}"
+			wmode="transparent"
+			type="application/x-shockwave-flash"
+		>
+	</div>
+{% endif %}
+
+<form action="{% url 'game.views.edit_game' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
