@@ -19,6 +19,8 @@ class Migration(SchemaMigration):
             ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('bgm', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('swf', self.gf('django.db.models.fields.CharField')(max_length=8)),
+            ('state', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
+            ('successor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'], null=True)),
         ))
         db.send_create_signal('game', ['Game'])
 
@@ -131,6 +133,8 @@ class Migration(SchemaMigration):
             'data_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'music_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'state': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
+            'successor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']", 'null': 'True'}),
             'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '64'})
         },

@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 from django.conf import settings
 
+GAME_STATE_INIT = 0
+GAME_STATE_EDIT = 1
+GAME_STATE_PUBLIC = 2
+GAME_STATE_DEL = 3
+GAME_STATE_DEPREDICTED = 4
+
 class Game(models.Model):
     author = models.ForeignKey(auth_models.User)
     title = models.CharField(max_length=settings.OWATA_TITLE_SIZE)
@@ -11,6 +17,8 @@ class Game(models.Model):
     data = models.FileField(upload_to="game/data/%Y/%m/%d")
     bgm = models.FileField(upload_to="game/bgm/%Y/%m/%d")
     swf = models.CharField(max_length=8)
+    state = models.IntegerField(db_index=True)
+    successor = models.ForeignKey("self",null=True)
 
 class GameDiff(models.Model):
     game = models.ForeignKey(Game,db_index=True)
