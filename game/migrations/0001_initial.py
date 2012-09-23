@@ -26,6 +26,7 @@ class Migration(SchemaMigration):
         db.create_table('game_gamediff', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'])),
+            ('ura', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True)),
             ('diff', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
             ('star', self.gf('django.db.models.fields.IntegerField')()),
         ))
@@ -146,7 +147,8 @@ class Migration(SchemaMigration):
             'diff': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'game': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'star': ('django.db.models.fields.IntegerField', [], {})
+            'star': ('django.db.models.fields.IntegerField', [], {}),
+            'ura': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'})
         },
         'game.scorereport': {
             'Meta': {'object_name': 'ScoreReport'},

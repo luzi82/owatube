@@ -14,6 +14,7 @@ class Game(models.Model):
 
 class GameDiff(models.Model):
     game = models.ForeignKey(Game,db_index=True)
+    ura = models.BooleanField(db_index=True)
     diff = models.IntegerField(db_index=True)
     star = models.IntegerField()
     

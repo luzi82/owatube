@@ -145,6 +145,7 @@ def add_game(request):
                 if star==0:continue
                 game.models.GameDiff.objects.create(
                     game = db_game,
+                    ura = False,
                     diff = i,
                     star = star,
                 )

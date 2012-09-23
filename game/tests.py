@@ -61,7 +61,7 @@ class SimpleTest(TestCase):
             self.fail()
         except game.models.GameDiff.DoesNotExist:pass
         
-        tmp = game.models.GameDiff.objects.get(game=game_data,diff=3)
+        tmp = game.models.GameDiff.objects.get(game=game_data,ura=False,diff=3)
         self.assertEqual(tmp.star, 7)
 
     def test_add_game_data_err(self):
