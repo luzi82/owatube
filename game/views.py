@@ -51,12 +51,36 @@ def get_user_profile(request,user):
 def get_game_score_list(request, user):
     return render(request,"dummy.tmpl")
 
+get_game_list_select_map={
+    "comment_count" : 'SELECT COUNT(*) FROM game_gamecomment WHERE game_gamecomment.game_id = game_game.id',
+    "report_count"  : 'SELECT COUNT(*) FROM game_scorereport WHERE game_scorereport.game_id = game_game.id',
+}
+for u in xrange(2):
+    for d in xrange(4):
+        m={"u":u,"d":d}
+        get_game_list_select_map["d%(u)d%(d)d"%m]="""
+            CASE
+                WHEN EXISTS (
+                    SELECT * FROM game_gamediff
+                        WHERE
+                            game_gamediff.game_id = game_game.id AND
+                            game_gamediff.ura = %(u)d AND
+                            game_gamediff.diff = %(d)d
+                    ) 
+                    THEN (
+                        SELECT star FROM game_gamediff
+                            WHERE
+                                game_gamediff.game_id = game_game.id AND
+                                game_gamediff.ura = %(u)d AND
+                                game_gamediff.diff = %(d)d
+                    )
+                ELSE "-"
+            END
+        """%m
+
 @_check_u
 def get_game_list(request, user):
-    game_list = game.models.Game.objects.filter(author__exact=user).extra(select={
-        "comment_count" : 'SELECT COUNT(*) FROM game_gamecomment WHERE game_gamecomment.game_id = game_game.id',
-        "report_count"  : 'SELECT COUNT(*) FROM game_scorereport WHERE game_scorereport.game_id = game_game.id'
-    },)
+    game_list = game.models.Game.objects.filter(author__exact=user).extra(select=get_game_list_select_map,)
     return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
 
 @_check_game_entry

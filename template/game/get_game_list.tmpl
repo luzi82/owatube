@@ -11,6 +11,7 @@
 <table class="span12" border="1">
 	<tr>
 		<th>Title</th>
+		<th>Diff</th>
 		<th>Score report</th>
 		<th>Comment</th>
 		<th>Upload date</th>
@@ -19,6 +20,7 @@
 	{% for game in game_list %}
 		<tr>
 			<td><a href="{% url 'game.views.get_game' game_entry=game.id %}">{{ game.title }}</a></td>
+			<td>{{ game.d00 }}/{{ game.d01 }}/{{ game.d02 }}/{{ game.d03 }} {{ game.d10 }}/{{ game.d11 }}/{{ game.d12 }}/{{ game.d13 }}</td>
 			<td>{{ game.report_count }}</td>
 			<td>{{ game.comment_count }}</td>
 			<td>{{ game.create_date }}</td>
