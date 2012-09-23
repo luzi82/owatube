@@ -2,10 +2,10 @@
 
 {% load url from future %}
 
-{% block title %}{{ user.username }} - Game list{% endblock %}
+{% block title %}{{ list_user.username }} - Game list{% endblock %}
 
 {% block main %}
-<h1>My owata</h1>
+<h1>{{ list_user.username }} owata list</h1>
 
 <div class="row">
 <table class="span12" border="1">
@@ -15,7 +15,9 @@
 		<th>Score report</th>
 		<th>Comment</th>
 		<th>Upload date</th>
-		<th></th>
+		{% if is_me %}
+			<th></th>
+		{% endif %}
 	</tr>
 	{% for game in game_list %}
 		<tr>
@@ -24,7 +26,9 @@
 			<td>{{ game.report_count }}</td>
 			<td>{{ game.comment_count }}</td>
 			<td>{{ game.create_date }}</td>
-			<td><a href="{% url 'game.views.edit_game' game_entry=game.id %}">Edit</a></td>
+			{% if is_me %}
+				<td><a href="{% url 'game.views.edit_game' game_entry=game.id %}">Edit</a></td>
+			{% endif %}
 		</tr>
 	{% endfor %}
 </table>

@@ -81,7 +81,7 @@ for u in xrange(2):
 @_check_u
 def get_game_list(request, user):
     game_list = game.models.Game.objects.filter(author__exact=user).extra(select=get_game_list_select_map,)
-    return render(request,"game/get_game_list.tmpl",{"game_list":game_list})
+    return render(request,"game/get_game_list.tmpl",{"game_list":game_list,"list_user":user,"is_me":request.user==user})
 
 @_check_game_entry
 def get_game(request, game):
