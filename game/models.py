@@ -2,21 +2,20 @@ from django.db import models
 from django.contrib.auth import models as auth_models
 from django.conf import settings
 
-GAME_STATE_INIT = 0
-GAME_STATE_EDIT = 1
-GAME_STATE_PUBLIC = 2
-GAME_STATE_DEL = 3
-GAME_STATE_DEPREDICTED = 4
+GAME_STATE_EDIT = 0
+GAME_STATE_PUBLIC = 1
+GAME_STATE_DEL = 2
+GAME_STATE_DEPREDICTED = 3
 
 class Game(models.Model):
-    author = models.ForeignKey(auth_models.User)
-    title = models.CharField(max_length=settings.OWATA_TITLE_SIZE)
-    music_by = models.CharField(max_length=settings.OWATA_MUSICBY_SIZE)
-    data_by = models.CharField(max_length=settings.OWATA_DATABY_SIZE)
+    author = models.ForeignKey(auth_models.User,db_index=True)
+    title = models.CharField(max_length=settings.OWATA_TITLE_SIZE,null=True)
+    music_by = models.CharField(max_length=settings.OWATA_MUSICBY_SIZE,null=True)
+    data_by = models.CharField(max_length=settings.OWATA_DATABY_SIZE,null=True)
     create_date = models.DateTimeField(auto_now=True)
-    data = models.FileField(upload_to="game/data/%Y/%m/%d")
-    bgm = models.FileField(upload_to="game/bgm/%Y/%m/%d")
-    swf = models.CharField(max_length=8)
+    data = models.FileField(upload_to="game/data/%Y/%m/%d",null=True)
+    bgm = models.FileField(upload_to="game/bgm/%Y/%m/%d",null=True)
+    swf = models.CharField(max_length=8,null=True)
     state = models.IntegerField(db_index=True)
     successor = models.ForeignKey("self",null=True)
 

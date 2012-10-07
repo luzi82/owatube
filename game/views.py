@@ -151,41 +151,67 @@ def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
-            swf_key = form.cleaned_data["swf"]
-            data_f=form.cleaned_data["data"];data_f.open()
-            data_buf = data_f.read()
-            data_data = game.swf.parse_data(swf_key, data_buf)
-            db_game = game.models.Game.objects.create(
-                author=request.user,
-                title=data_data["title"],
-                music_by=data_data["music_by"],
-                data_by=data_data["data_by"],
-                data=request.FILES['data'],
-                bgm=request.FILES['bgm'],
-                swf=swf_key
-            )
-            for i in range(len(data_data["diff"])):
-                star = data_data["diff"][i]
-                if star==0:continue
-                game.models.GameDiff.objects.create(
-                    game = db_game,
-                    ura = False,
-                    diff = i,
-                    star = star,
+            game_id = form.cleaned_data["id"]
+            if game_id == -1:
+                db_game = game.models.Game.objects.create(
+                    author=request.user,
+                    state=models.GAME_STATE_EDIT,
                 )
-            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
+                game_id = db_game.id
+                form.cleaned_data["id"] = game_id
+            else:
+                db_game = game.models.Game.objects.get(pk = game_id)
+                if db_game.author != request.user:
+                    # TODO give error
+                    return HttpResponseRedirect(reverse("game.views.index"))
+
+            swf_key = form.cleaned_data["swf"]
+            db_game.swf = swf_key
+
+            data_f=form.cleaned_data["data"]
+            if data_f != None:
+                data_f.open()
+                data_buf = data_f.read()
+                data_data = game.swf.parse_data(swf_key, data_buf)
+                db_game.title = data_data["title"]
+                db_game.music_by = data_data["music_by"]
+                db_game.data_by=data_data["data_by"]
+                db_game.data=request.FILES['data']
+                
+            bgm_rf = request.FILES['bgm']
+            if bgm_rf != None:
+                db_game.bgm = bgm_rf
+
+#            for i in range(len(data_data["diff"])):
+#                star = data_data["diff"][i]
+#                if star==0:continue
+#                game.models.GameDiff.objects.create(
+#                    game = db_game,
+#                    ura = False,
+#                    diff = i,
+#                    star = star,
+#                )
+#            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
+
+            db_game.save()
     else:
-        form = AddGameForm()
+        form = AddGameForm(initial={"id":-1})
     return render(request,"game/add_game.tmpl",{"form":form})
 
 class AddGameForm (forms.Form):
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput())
     data = forms.FileField()
     bgm = forms.FileField()
     swf = forms.ChoiceField(choices=game.swf.SWF_CHOICE)
     # pic
     
     def clean_data(self):
-        data = self.cleaned_data['data'];data.open()
+        data = self.cleaned_data['data'];
+        
+        if self.cleaned_data['id'] != -1 and data == None:
+            return data
+        
+        data.open()
         buf=data.read()
 
         ms = magic.open(magic.MAGIC_MIME_TYPE)
@@ -198,7 +224,12 @@ class AddGameForm (forms.Form):
         return data
     
     def clean_bgm(self):
-        bgm = self.cleaned_data['bgm'];bgm.open()
+        bgm = self.cleaned_data['bgm'];
+        
+        if self.cleaned_data['id'] != -1 and bgm == None:
+            return bgm
+        
+        bgm.open()
         buf=bgm.read()
 
         ms = magic.open(magic.MAGIC_MIME_TYPE)

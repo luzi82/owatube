@@ -12,13 +12,13 @@ class Migration(SchemaMigration):
         db.create_table('game_game', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('music_by', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('data_by', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
+            ('music_by', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
+            ('data_by', self.gf('django.db.models.fields.CharField')(max_length=64, null=True)),
             ('create_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('bgm', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('swf', self.gf('django.db.models.fields.CharField')(max_length=8)),
+            ('data', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True)),
+            ('bgm', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True)),
+            ('swf', self.gf('django.db.models.fields.CharField')(max_length=8, null=True)),
             ('state', self.gf('django.db.models.fields.IntegerField')(db_index=True)),
             ('successor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['game.Game'], null=True)),
         ))
@@ -127,16 +127,16 @@ class Migration(SchemaMigration):
         'game.game': {
             'Meta': {'object_name': 'Game'},
             'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
-            'bgm': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'bgm': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True'}),
             'create_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'data_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'data': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True'}),
+            'data_by': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'music_by': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'music_by': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'}),
             'state': ('django.db.models.fields.IntegerField', [], {'db_index': 'True'}),
             'successor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['game.Game']", 'null': 'True'}),
-            'swf': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+            'swf': ('django.db.models.fields.CharField', [], {'max_length': '8', 'null': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True'})
         },
         'game.gamecomment': {
             'Meta': {'object_name': 'GameComment'},
