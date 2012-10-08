@@ -152,6 +152,7 @@ def add_game(request):
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
             game_id = form.cleaned_data["id"]
+            pprint.pprint(game_id)
             if game_id == -1:
                 db_game = game.models.Game.objects.create(
                     author=request.user,
@@ -162,6 +163,9 @@ def add_game(request):
             else:
                 db_game = game.models.Game.objects.get(pk = game_id)
                 if db_game.author != request.user:
+                    # TODO give error
+                    return HttpResponseRedirect(reverse("game.views.index"))
+                if db_game.state != models.GAME_STATE_EDIT:
                     # TODO give error
                     return HttpResponseRedirect(reverse("game.views.index"))
 
@@ -200,8 +204,8 @@ def add_game(request):
 
 class AddGameForm (forms.Form):
     id = forms.IntegerField(widget=forms.widgets.HiddenInput())
-    data = forms.FileField()
-    bgm = forms.FileField()
+    data = forms.FileField(required=False)
+    bgm = forms.FileField(required=False)
     swf = forms.ChoiceField(choices=game.swf.SWF_CHOICE)
     # pic
     
@@ -210,6 +214,8 @@ class AddGameForm (forms.Form):
         
         if self.cleaned_data['id'] != -1 and data == None:
             return data
+        if data == None:
+            raise forms.ValidationError("No file")
         
         data.open()
         buf=data.read()
@@ -228,6 +234,8 @@ class AddGameForm (forms.Form):
         
         if self.cleaned_data['id'] != -1 and bgm == None:
             return bgm
+        if bgm == None:
+            raise forms.ValidationError("No file")
         
         bgm.open()
         buf=bgm.read()
