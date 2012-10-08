@@ -108,26 +108,26 @@ class SimpleTest(TestCase):
         self.assertEqual(ret["diff"], [0,0,0,7])
 
 
-    def test_add_game_comment(self):
-        User.objects.create_user("submitter",password="asdf")
-        
-        client = Client()
-        client.login(username="submitter",password="asdf")
-        
-        data_f=open("game/test_res/data.txt","r")
-        bgm_f=open("game/test_res/bgm.mp3","r")
-        client.post("/game/upload/", {
-            "data":data_f,
-            "bgm":bgm_f,
-            "swf":"f90626fa",
-        })
-
-        comment="Comment 1"
-        client.post("/game/comment/", {
-            "game_entry":"1",
-            "comment":comment,
-        })
-        
-        db_gamecomment=game.models.GameComment.objects.get(pk=1)
-        self.assertEqual(db_gamecomment.player.username,"submitter")
-        self.assertEqual(db_gamecomment.content,comment.decode("utf-8"))
+#    def test_add_game_comment(self):
+#        User.objects.create_user("submitter",password="asdf")
+#        
+#        client = Client()
+#        client.login(username="submitter",password="asdf")
+#        
+#        data_f=open("game/test_res/data.txt","r")
+#        bgm_f=open("game/test_res/bgm.mp3","r")
+#        client.post("/game/upload/", {
+#            "data":data_f,
+#            "bgm":bgm_f,
+#            "swf":"f90626fa",
+#        })
+#
+#        comment="Comment 1"
+#        client.post("/game/comment/", {
+#            "game_entry":"1",
+#            "comment":comment,
+#        })
+#        
+#        db_gamecomment=game.models.GameComment.objects.get(pk=1)
+#        self.assertEqual(db_gamecomment.player.username,"submitter")
+#        self.assertEqual(db_gamecomment.content,comment.decode("utf-8"))
