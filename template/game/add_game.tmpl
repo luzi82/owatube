@@ -1,12 +1,22 @@
 {% extends "base.tmpl" %}
 
 {% load url from future %}
+{% load comment %}
 
 {% block title %}Add game{% endblock %}
 
 {% block main %}
 
 <h1>Add game</h1>
+
+{% if preview %}
+<ul>
+<li>title: {{title}}</li>
+<li>music_by: {{music_by}}</li>
+<li>data_by: {{data_by}}</li>
+<li>star: {{star|star_list}} </li>
+</ul>
+{% endif %}
 
 <form action="{% url 'game.views.add_game' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 {{ form.as_p }}

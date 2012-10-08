@@ -148,6 +148,11 @@ def add_game_rank(request):
 
 @login_required
 def add_game(request):
+    game_title = None
+    game_music_by = None
+    game_data_by = None
+    game_id = -1
+    game_star = None
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
@@ -179,21 +184,34 @@ def add_game(request):
                 db_game.music_by = data_data["music_by"]
                 db_game.data_by=data_data["data_by"]
                 db_game.data=request.FILES['data']
+                game.models.GameDiff.objects.filter(
+                    game = db_game,
+                    ura = False,
+                ).delete()
+                for i in range(len(data_data["diff"])):
+                    star = data_data["diff"][i]
+                    if star == 0 : continue
+                    game.models.GameDiff.objects.create(
+                        game = db_game,
+                        ura = False,
+                        diff = i,
+                        star = star,
+                    )
+                game_star = [data_data["diff"],[0,0,0,0]]
+            else:
+                game_star = [ [ 0 for i in xrange(4) ] for i in xrange(2) ]
+                db_diff_list = game.models.GameDiff.objects.filter(
+                    game = db_game,
+                )
+                for db_diff in db_diff_list:
+                    x = 1 if db_diff.ura else 0
+                    y = db_diff.diff
+                    v = db_diff.star
+                    game_star[x][y] = v
                 
             bgm_f = form.cleaned_data["bgm"]
             if bgm_f != None:
                 db_game.bgm = request.FILES['bgm']
-
-#            for i in range(len(data_data["diff"])):
-#                star = data_data["diff"][i]
-#                if star==0:continue
-#                game.models.GameDiff.objects.create(
-#                    game = db_game,
-#                    ura = False,
-#                    diff = i,
-#                    star = star,
-#                )
-#            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
 
             db_game.save()
             
@@ -201,9 +219,19 @@ def add_game(request):
                 "id":game_id,
                 "swf":swf_key,
             })
+            game_title = db_game.title
+            game_music_by = db_game.music_by
+            game_data_by = db_game.data_by
     else:
-        form = AddGameForm(initial={"id":-1})
-    return render(request,"game/add_game.tmpl",{"form":form})
+        form = AddGameForm(initial={"id":game_id})
+    return render(request,"game/add_game.tmpl",{
+        "form" : form,
+        "preview" : ( game_id != -1 ),
+        "title" : game_title,
+        "music_by" : game_music_by,
+        "data_by" : game_data_by,
+        "star" : game_star,
+    })
 
 class AddGameForm (forms.Form):
     id = forms.IntegerField(widget=forms.widgets.HiddenInput())

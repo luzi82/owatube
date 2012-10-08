@@ -11,3 +11,12 @@ def comment(value, autoescape=None):
     value=value.replace("\r\n","<br/>")
     value=value.replace("\n","<br/>")
     return mark_safe(value)
+
+def star(value):
+    if value == -1 or value == 0 :
+        return "-"
+    return str(value)
+
+@register.filter(is_safe=True)
+def star_list(value):
+    return " / ".join([ ",".join( star(j) for j in i ) for i in value ])
