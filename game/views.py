@@ -152,14 +152,12 @@ def add_game(request):
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
             game_id = form.cleaned_data["id"]
-            pprint.pprint(game_id)
             if game_id == -1:
                 db_game = game.models.Game.objects.create(
                     author=request.user,
                     state=models.GAME_STATE_EDIT,
                 )
                 game_id = db_game.id
-                form.cleaned_data["id"] = game_id
             else:
                 db_game = game.models.Game.objects.get(pk = game_id)
                 if db_game.author != request.user:
@@ -182,9 +180,9 @@ def add_game(request):
                 db_game.data_by=data_data["data_by"]
                 db_game.data=request.FILES['data']
                 
-            bgm_rf = request.FILES['bgm']
-            if bgm_rf != None:
-                db_game.bgm = bgm_rf
+            bgm_f = form.cleaned_data["bgm"]
+            if bgm_f != None:
+                db_game.bgm = request.FILES['bgm']
 
 #            for i in range(len(data_data["diff"])):
 #                star = data_data["diff"][i]
@@ -198,6 +196,11 @@ def add_game(request):
 #            return HttpResponseRedirect(reverse("game.views.get_game",kwargs={"game_entry":db_game.pk}))
 
             db_game.save()
+            
+            form = AddGameForm(initial={
+                "id":game_id,
+                "swf":swf_key,
+            })
     else:
         form = AddGameForm(initial={"id":-1})
     return render(request,"game/add_game.tmpl",{"form":form})
