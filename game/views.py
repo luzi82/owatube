@@ -55,33 +55,25 @@ get_game_list_select_map={
     "comment_count" : 'SELECT COUNT(*) FROM game_gamecomment WHERE game_gamecomment.game_id = game_game.id',
     "report_count"  : 'SELECT COUNT(*) FROM game_scorereport WHERE game_scorereport.game_id = game_game.id',
 }
-for u in xrange(2):
-    for d in xrange(4):
-        m={"u":u,"d":d}
-        get_game_list_select_map["d%(u)d%(d)d"%m]="""
-            CASE
-                WHEN EXISTS (
-                    SELECT * FROM game_gamediff
-                        WHERE
-                            game_gamediff.game_id = game_game.id AND
-                            game_gamediff.ura = %(u)d AND
-                            game_gamediff.diff = %(d)d
-                    ) 
-                    THEN (
-                        SELECT star FROM game_gamediff
-                            WHERE
-                                game_gamediff.game_id = game_game.id AND
-                                game_gamediff.ura = %(u)d AND
-                                game_gamediff.diff = %(d)d
-                    )
-                ELSE "-"
-            END
-        """%m
 
 @_check_u
 def get_game_list(request, user):
-    game_list = game.models.Game.objects.filter(author__exact=user).extra(select=get_game_list_select_map,)
-    return render(request,"game/get_game_list.tmpl",{"game_list":game_list,"list_user":user,"is_me":request.user==user})
+    db_game_list = game.models.Game.objects.filter(author__exact=user).extra(select=get_game_list_select_map,)
+    db_gamediff_list = game.models.GameDiff.objects.filter(game__in=db_game_list).select_related("game")
+    game_map = {}
+    for db_game in db_game_list:
+        g = {}
+        for k in ["id","title","create_date","comment_count","report_count"]:
+            g[k] = getattr(db_game,k)
+        g["star"]=game.create_empty_star_list()
+        game_map[g["id"]]=g
+    for db_gamediff in db_gamediff_list :
+        game_id = db_gamediff.game.id
+        ura_idx = 1 if db_gamediff.ura else 0
+        diff_idx = db_gamediff.diff
+        star = db_gamediff.star
+        game_map[game_id]["star"][ura_idx][diff_idx] = star
+    return render(request,"game/get_game_list.tmpl",{"game_list":game_map.values(),"list_user":user,"is_me":request.user==user})
 
 @_check_game_entry
 def get_game(request, game):
@@ -199,7 +191,7 @@ def add_game(request):
                     )
                 game_star = [data_data["diff"],[0,0,0,0]]
             else:
-                game_star = [ [ 0 for i in xrange(4) ] for i in xrange(2) ]
+                game_star = game.create_empty_star_list()
                 db_diff_list = game.models.GameDiff.objects.filter(
                     game = db_game,
                 )

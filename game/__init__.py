@@ -33,3 +33,6 @@ class PlayResult:
             other_a=getattr(other,a)
             if self_a!=other_a:return False
         return True
+
+def create_empty_star_list():
+    return [ [ 0 for i in xrange(4) ] for i in xrange(2) ]
