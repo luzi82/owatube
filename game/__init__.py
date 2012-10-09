@@ -1,5 +1,6 @@
 import inspect
 import pprint
+import models
 
 class PlayResult:
     
@@ -36,3 +37,14 @@ class PlayResult:
 
 def create_empty_star_list():
     return [ [ 0 for i in xrange(4) ] for i in xrange(2) ]
+
+
+def get_game_star(db_game):
+    ret = create_empty_star_list()
+    db_diff_list = models.GameDiff.objects.filter(game = db_game)
+    for db_diff in db_diff_list:
+        x = 1 if db_diff.ura else 0
+        y = db_diff.diff
+        v = db_diff.star
+        ret[x][y] = v
+    return ret

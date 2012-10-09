@@ -10,17 +10,27 @@
 <h1>Add game</h1>
 
 {% if preview %}
+<div align="center">
+<embed width="576px" height="432px" src="{% url 'game.views.get_game_swf' game_entry=game_id %}" wmode="transparent" type="application/x-shockwave-flash">
+</div>
+
 <ul>
 <li>title: {{title}}</li>
 <li>music_by: {{music_by}}</li>
 <li>data_by: {{data_by}}</li>
 <li>star: {{star|star_list}} </li>
 </ul>
+
+<form action="{% url 'game.views.submit_game' %}" method="post">{% csrf_token %}
+{{ submit_form.as_p }}
+<input type="submit" value="Publish" />
+</form>
+
 {% endif %}
 
 <form action="{% url 'game.views.add_game' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 {{ form.as_p }}
-<input type="submit" value="Submit" />
+<input type="submit" value="Upload" />
 </form>
 
 {% endblock %}
