@@ -7,7 +7,7 @@
 
 {% block main %}
 
-<h1>Edit game</h1>
+<h1>Edit game: {{title}}</h1>
 
 <div align="center">
 <embed width="576px" height="432px" src="{% url 'game.views.get_game_swf' game_entry=game_id %}" wmode="transparent" type="application/x-shockwave-flash">
