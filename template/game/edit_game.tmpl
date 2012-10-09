@@ -1,6 +1,7 @@
 {% extends "base.tmpl" %}
 
 {% load url from future %}
+{% load comment %}
 
 {% block title %}Edit game{% endblock %}
 
@@ -8,18 +9,23 @@
 
 <h1>Edit game</h1>
 
-{% if owata_ready %}
-	<div align="center">
-		<embed
-			width="576px" height="432px"
-			src="{% url 'game.views.get_game_swf' game_entry=game.id %}"
-			wmode="transparent"
-			type="application/x-shockwave-flash"
-		>
-	</div>
-{% endif %}
+<div align="center">
+<embed width="576px" height="432px" src="{% url 'game.views.get_game_swf' game_entry=game_id %}" wmode="transparent" type="application/x-shockwave-flash">
+</div>
 
-<form action="{% url 'game.views.edit_game' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+<ul>
+<li>title: {{title}}</li>
+<li>music_by: {{music_by}}</li>
+<li>data_by: {{data_by}}</li>
+<li>star: {{star|star_list}} </li>
+</ul>
+
+<form action="{% url 'game.views.submit_game' %}" method="post">{% csrf_token %}
+{{ submit_form.as_p }}
+<input type="submit" value="Publish" />
+</form>
+
+<form action="{% url 'game.views.edit_game' game_entry=game_id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>

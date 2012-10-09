@@ -152,24 +152,10 @@ def add_game(request):
             
             return HttpResponseRedirect(reverse("game.views.edit_game",kwargs={"game_entry":db_game.id}))
             
-#            form = AddGameForm(initial={
-#                "id":game_id,
-#                "swf":swf_key,
-#            })
-#            game_title = db_game.title
-#            game_music_by = db_game.music_by
-#            game_data_by = db_game.data_by
     else:
         form = AddGameForm(initial={"id":-1})
 
-#    submit_form = None
-#    if game_id != -1 :
-#        submit_form = SubmitGameForm(initial={"id":game_id})
-    
-    return render(request,"game/add_game.tmpl",{
-        "form" : form,
-        "preview" : False,
-    })
+    return render(request,"game/add_game.tmpl",{"form" : form})
 
 @login_required
 @_check_game_entry
@@ -183,9 +169,8 @@ def edit_game(request, db_game):
     submit_form = SubmitGameForm(initial={"id":db_game.id})
     game_star = game.get_game_star(db_game)
     
-    return render(request,"game/add_game.tmpl",{
+    return render(request,"game/edit_game.tmpl",{
         "form" : form,
-        "preview" : True,
         "submit_form" : submit_form,
         "title" : db_game.title,
         "music_by" : db_game.music_by,
