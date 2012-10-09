@@ -160,6 +160,10 @@ def add_game(request):
 @login_required
 @_check_game_entry
 def edit_game(request, db_game):
+    if request.user != db_game.author :
+        # TODO give error
+        return HttpResponseRedirect(reverse("game.views.index"))
+    
     if request.method == "POST":
         form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
